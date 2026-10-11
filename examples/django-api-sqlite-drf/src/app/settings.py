@@ -16,9 +16,7 @@ INSTALLED_APPS = [
     "rest_framework",
 ]
 
-MIDDLEWARE = [
-    "django.middleware.common.CommonMiddleware",
-]
+MIDDLEWARE = ["django.middleware.common.CommonMiddleware"]
 
 ROOT_URLCONF = "app.urls"
 WSGI_APPLICATION = "app.wsgi.application"
@@ -36,5 +34,5 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     # Maps serializer 400s to the contract's 422 (see views.py).
-    "EXCEPTION_HANDLER": "app.views.api_exception_handler",
+    "EXCEPTION_HANDLER": "app.views.api_exception_handler"
 }

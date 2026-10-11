@@ -9,9 +9,7 @@ from .models import Todo
 from .repository import InMemoryTodoRepository
 
 # Dispatch config shared by the WSGI app factory and the standalone server.
-_DISPATCH_CONFIG = {
-    "/": {"request.dispatch": cherrypy.dispatch.MethodDispatcher()},
-}
+_DISPATCH_CONFIG = {"/": {"request.dispatch": cherrypy.dispatch.MethodDispatcher()}}
 
 
 def _to_json(todo: Todo) -> dict:
@@ -106,9 +104,7 @@ class TodoResource:
         return b""
 
 
-def create_app(
-    repo: InMemoryTodoRepository | None = None,
-) -> cherrypy.Application:
+def create_app(repo: InMemoryTodoRepository | None = None) -> cherrypy.Application:
     """Build a fresh, independently-mounted WSGI app with its own store."""
     resource = TodoResource(repo or InMemoryTodoRepository())
     return cherrypy.Application(resource, "/todos", _DISPATCH_CONFIG)
@@ -119,9 +115,10 @@ app = create_app()
 
 def main() -> None:
     port = int(os.environ.get("PORT", "5000"))
-    cherrypy.config.update(
-        {"server.socket_host": "0.0.0.0", "server.socket_port": port}
-    )
+    cherrypy.config.update({
+        "server.socket_host": "0.0.0.0",
+        "server.socket_port": port,
+    })
     cherrypy.tree.mount(app.root, "/todos", _DISPATCH_CONFIG)
     cherrypy.engine.start()
     cherrypy.engine.block()

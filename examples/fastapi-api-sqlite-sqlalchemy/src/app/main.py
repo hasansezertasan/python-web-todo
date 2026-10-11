@@ -20,11 +20,7 @@ def create_app(db_url: str | None = None) -> FastAPI:
     db_url = db_url or DEFAULT_DB_URL
     connect_args = {"check_same_thread": False}
     if db_url.endswith(":memory:"):
-        engine = create_engine(
-            db_url,
-            connect_args=connect_args,
-            poolclass=StaticPool,
-        )
+        engine = create_engine(db_url, connect_args=connect_args, poolclass=StaticPool)
     else:
         engine = create_engine(db_url, connect_args=connect_args)
     Base.metadata.create_all(engine)

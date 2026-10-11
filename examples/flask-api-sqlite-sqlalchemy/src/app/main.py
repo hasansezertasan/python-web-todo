@@ -27,9 +27,7 @@ def create_app(db_url: str | None = None) -> Flask:
     db_url = db_url or DEFAULT_DB_URL
     if db_url == "sqlite:///:memory:":
         engine = create_engine(
-            db_url,
-            connect_args={"check_same_thread": False},
-            poolclass=StaticPool,
+            db_url, connect_args={"check_same_thread": False}, poolclass=StaticPool
         )
     elif db_url.startswith("sqlite:"):
         engine = create_engine(db_url, connect_args={"check_same_thread": False})

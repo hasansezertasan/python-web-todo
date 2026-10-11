@@ -3,19 +3,11 @@
 import json
 import os
 
-from wheezy.http import (
-    HTTPResponse,
-    WSGIApplication,
-    json_response,
-    method_not_allowed,
-)
+from wheezy.http import HTTPResponse, WSGIApplication, json_response, method_not_allowed
 from wheezy.http.response import HTTP_STATUS
 from wheezy.routing import url
 from wheezy.web.handlers import MethodHandler
-from wheezy.web.middleware import (
-    bootstrap_defaults,
-    path_routing_middleware_factory,
-)
+from wheezy.web.middleware import bootstrap_defaults, path_routing_middleware_factory
 
 from .models import Todo
 from .repository import InMemoryTodoRepository

@@ -17,23 +17,14 @@ INSTALLED_APPS = [
     "app",
 ]
 
-MIDDLEWARE = [
-    "django.middleware.common.CommonMiddleware",
-]
+MIDDLEWARE = ["django.middleware.common.CommonMiddleware"]
 
 # Dummy setting required by Django at startup. Never touched: this example
 # has no models, no migrations, and issues no ORM queries.
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": ":memory:",
-    }
-}
+DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-REST_FRAMEWORK = {
-    "UNAUTHENTICATED_USER": None,
-}
+REST_FRAMEWORK = {"UNAUTHENTICATED_USER": None}

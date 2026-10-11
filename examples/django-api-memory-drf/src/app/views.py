@@ -11,11 +11,7 @@ from rest_framework.status import (
 from rest_framework.views import APIView
 
 from . import repository
-from .serializers import (
-    TodoCreateSerializer,
-    TodoReadSerializer,
-    TodoUpdateSerializer,
-)
+from .serializers import TodoCreateSerializer, TodoReadSerializer, TodoUpdateSerializer
 
 NOT_FOUND = {"error": "Todo not found"}
 

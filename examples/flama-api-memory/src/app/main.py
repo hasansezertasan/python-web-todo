@@ -39,7 +39,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Flama:
                 "title": "flama-api-memory",
                 "version": "0.1.0",
                 "description": "Todo JSON API built with Flama and in-memory storage.",
-            },
+            }
         }
     )
     app.add_exception_handler(exceptions.ValidationError, _validation_error_to_422)

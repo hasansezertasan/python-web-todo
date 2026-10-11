@@ -51,10 +51,7 @@ def client_kwargs(example: str, tmp_path: Path) -> dict:
     if example == "litestar-api-sqlite-advanced-alchemy":
         # File DB per test: :memory: does not survive across async connections.
         return {"db_url": f"sqlite+aiosqlite:///{tmp_path}/todos.db"}
-    if example in (
-        "fastapi-api-sqlite-sqlalchemy",
-        "flask-api-sqlite-sqlalchemy",
-    ):
+    if example in ("fastapi-api-sqlite-sqlalchemy", "flask-api-sqlite-sqlalchemy"):
         return {"db_url": "sqlite:///:memory:"}
     return {}
 

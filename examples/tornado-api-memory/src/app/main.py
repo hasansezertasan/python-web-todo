@@ -12,10 +12,7 @@ from .store import TodoStore
 def create_app(store: TodoStore | None = None) -> tornado.web.Application:
     """Return a fresh application with its own empty store (unless given)."""
     return tornado.web.Application(
-        [
-            (r"/todos", TodoListHandler),
-            (r"/todos/([0-9]+)", TodoDetailHandler),
-        ],
+        [(r"/todos", TodoListHandler), (r"/todos/([0-9]+)", TodoDetailHandler)],
         store=store or TodoStore(),
     )
 

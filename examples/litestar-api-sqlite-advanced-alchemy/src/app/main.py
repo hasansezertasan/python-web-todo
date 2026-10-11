@@ -120,8 +120,7 @@ def create_app(db_url: str | None = None) -> Litestar:
         exception_handlers={ValidationException: _validation_error_to_422},
         plugins=[SQLAlchemyInitPlugin(config=db_config)],
         openapi_config=OpenAPIConfig(
-            title="Todo API (Litestar, SQLite via advanced-alchemy)",
-            version="0.1.0",
+            title="Todo API (Litestar, SQLite via advanced-alchemy)", version="0.1.0"
         ),
     )
 

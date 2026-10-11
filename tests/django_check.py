@@ -126,11 +126,13 @@ if EXAMPLE in ("django-ssr-memory-native", "django-ssr-memory-jinja"):
 
     def reset():
         reset_store()
+
 elif EXAMPLE == "django-api-memory-drf":
     from app.repository import reset_store  # noqa: E402
 
     def reset():
         reset_store()
+
 else:
 
     def reset():

@@ -9,9 +9,7 @@ from .repository import InMemoryTodoRepository
 
 
 def create_app(
-    store: InMemoryTodoRepository | None = None,
-    host: str = "0.0.0.0",
-    port: int = 8000,
+    store: InMemoryTodoRepository | None = None, host: str = "0.0.0.0", port: int = 8000
 ) -> Server:
     """Build (and bind) a fresh server with its own empty store.
 

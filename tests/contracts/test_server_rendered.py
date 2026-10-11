@@ -11,10 +11,7 @@ from checks_ssr import (
 )
 from conftest import load_client
 
-SSR_EXAMPLES = [
-    "flask-ssr-memory-jinja",
-    "litestar-ssr-memory",
-]
+SSR_EXAMPLES = ["flask-ssr-memory-jinja", "litestar-ssr-memory"]
 
 
 @pytest.fixture(params=SSR_EXAMPLES)

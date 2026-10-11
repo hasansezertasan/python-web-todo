@@ -19,32 +19,22 @@ ALLOWED_HOSTS = ["*"]
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 
-INSTALLED_APPS = [
-    "todos",
-]
+INSTALLED_APPS = ["todos"]
 
-MIDDLEWARE = [
-    "django.middleware.common.CommonMiddleware",
-]
+MIDDLEWARE = ["django.middleware.common.CommonMiddleware"]
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.jinja2.Jinja2",
         "DIRS": [os.path.join(BASE_DIR, "todos", "templates")],
         "APP_DIRS": True,
-        "OPTIONS": {
-            "environment": "todos.jinja2.environment",
-        },
+        "OPTIONS": {"environment": "todos.jinja2.environment"},
     }
 ]
 
 # Dummy backend: never touched. This example uses a process-local
 # in-memory store (see todos.store) and must not use the ORM.
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.dummy",
-    }
-}
+DATABASES = {"default": {"ENGINE": "django.db.backends.dummy"}}
 
 USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

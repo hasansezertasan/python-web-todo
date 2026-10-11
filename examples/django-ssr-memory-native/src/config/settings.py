@@ -16,13 +16,9 @@ ALLOWED_HOSTS = ["*"]
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 
-INSTALLED_APPS = [
-    "todos",
-]
+INSTALLED_APPS = ["todos"]
 
-MIDDLEWARE = [
-    "django.middleware.common.CommonMiddleware",
-]
+MIDDLEWARE = ["django.middleware.common.CommonMiddleware"]
 
 TEMPLATES = [
     {
@@ -35,11 +31,7 @@ TEMPLATES = [
 
 # Dummy backend: never touched. This example uses a process-local
 # in-memory store (see todos.store) and must not use the ORM.
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.dummy",
-    }
-}
+DATABASES = {"default": {"ENGINE": "django.db.backends.dummy"}}
 
 USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

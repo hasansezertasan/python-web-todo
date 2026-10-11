@@ -40,15 +40,13 @@ def _not_found() -> JSONResponse:
 
 def _invalid_title() -> JSONResponse:
     return JSONResponse.from_content(
-        {"detail": "title must be a non-empty string"},
-        status_code=422,
+        {"detail": "title must be a non-empty string"}, status_code=422
     )
 
 
 def _invalid_done() -> JSONResponse:
     return JSONResponse.from_content(
-        {"detail": "done must be a boolean"},
-        status_code=422,
+        {"detail": "done must be a boolean"}, status_code=422
     )
 
 
@@ -82,8 +80,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
         if not _valid_title(title):
             return _invalid_title()
         return JSONResponse.from_content(
-            _to_json(repo.create(title=title)),
-            status_code=201,
+            _to_json(repo.create(title=title)), status_code=201
         )
 
     @app.get("/todos/{todo_id}")
@@ -111,7 +108,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
             return _invalid_done()
         try:
             return JSONResponse.from_content(
-                _to_json(repo.update(todo_id, title=title, done=done)),
+                _to_json(repo.update(todo_id, title=title, done=done))
             )
         except KeyError:
             return _not_found()

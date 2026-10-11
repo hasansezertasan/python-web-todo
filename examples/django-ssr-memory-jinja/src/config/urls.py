@@ -2,6 +2,4 @@
 
 from django.urls import include, path
 
-urlpatterns = [
-    path("", include("todos.urls")),
-]
+urlpatterns = [path("", include("todos.urls"))]

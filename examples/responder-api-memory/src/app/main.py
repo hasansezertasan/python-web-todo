@@ -24,9 +24,7 @@ def _invalid(resp: responder.Response, detail: str) -> None:
 def create_app(repo: InMemoryTodoRepository | None = None) -> responder.API:
     repo = repo or InMemoryTodoRepository()
     api = responder.API(
-        title="Todo API (Responder, in-memory)",
-        version="0.1.0",
-        openapi="3.0.2",
+        title="Todo API (Responder, in-memory)", version="0.1.0", openapi="3.0.2"
     )
 
     @api.route("/todos", methods=["GET"])

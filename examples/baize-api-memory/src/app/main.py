@@ -80,10 +80,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Router:
             return Response(status_code=204)
         return _method_not_allowed()
 
-    return Router(
-        ("/todos", todos),
-        ("/todos/{todo_id:int}", todo_detail),
-    )
+    return Router(("/todos", todos), ("/todos/{todo_id:int}", todo_detail))
 
 
 app = create_app()
