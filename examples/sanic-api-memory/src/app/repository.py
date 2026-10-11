@@ -1,4 +1,7 @@
-"""Process-local in-memory todo store. Starts empty; data loss on restart is acceptable."""
+"""Process-local in-memory todo store.
+
+Starts empty; data loss on restart is acceptable.
+"""
 
 import threading
 

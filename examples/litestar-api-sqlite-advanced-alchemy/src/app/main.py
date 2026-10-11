@@ -35,7 +35,10 @@ DB_URL_ENV_VAR = "TODO_DB_URL"
 
 
 def resolve_db_url(db_url: str | None = None) -> str:
-    """Resolve the database URL: explicit arg, then env var, then the example-dir file."""
+    """Resolve the database URL.
+
+    Precedence: explicit arg, then env var, then the example-dir file.
+    """
     return db_url or os.environ.get(DB_URL_ENV_VAR) or DEFAULT_DB_URL
 
 
