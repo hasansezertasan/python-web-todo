@@ -1,6 +1,6 @@
 """Todo JSON API with Quart and in-memory storage."""
 
-from quart import Quart, jsonify, request
+from quart import Quart, Response, jsonify, request
 
 from .models import Todo
 from .repository import InMemoryTodoRepository
@@ -19,11 +19,11 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Quart:
     app = Quart(__name__)
 
     @app.get("/todos")
-    async def list_todos():
+    async def list_todos() -> Response:
         return jsonify([_to_json(todo) for todo in await repo.list()])
 
     @app.post("/todos")
-    async def create_todo():
+    async def create_todo() -> tuple[Response, int]:
         body = await request.get_json(silent=True) or {}
         title = body.get("title")
         if not _valid_title(title):
@@ -31,14 +31,14 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Quart:
         return jsonify(_to_json(await repo.create(title=title))), 201
 
     @app.get("/todos/<int:todo_id>")
-    async def get_todo(todo_id: int):
+    async def get_todo(todo_id: int) -> Response | tuple[Response, int]:
         try:
             return jsonify(_to_json(await repo.get(todo_id)))
         except KeyError:
             return jsonify({"error": "Todo not found"}), 404
 
     @app.patch("/todos/<int:todo_id>")
-    async def update_todo(todo_id: int):
+    async def update_todo(todo_id: int) -> Response | tuple[Response, int]:
         body = await request.get_json(silent=True) or {}
         title = body.get("title")
         done = body.get("done")
@@ -50,7 +50,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Quart:
             return jsonify({"error": "Todo not found"}), 404
 
     @app.delete("/todos/<int:todo_id>")
-    async def delete_todo(todo_id: int):
+    async def delete_todo(todo_id: int) -> Response | tuple[str, int]:
         try:
             await repo.delete(todo_id)
         except KeyError:

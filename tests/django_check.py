@@ -13,6 +13,7 @@ import sys
 import tempfile
 import traceback
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 EXAMPLE = sys.argv[1]
@@ -77,32 +78,34 @@ else:
 
 
 class _Response:
-    def __init__(self, raw):
+    def __init__(self, raw: Any) -> None:
         self.status_code = raw.status_code
         self._raw = raw
         self.headers = dict(raw.headers)
 
-    def json(self):
+    def json(self) -> Any:
         try:
             return json.loads(self._raw.content.decode())
         except ValueError:
             return None
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self._raw.content.decode()
 
 
 class DjangoClient:
     """Uniform adapter over django.test.Client (form data= or json= posts)."""
 
-    def __init__(self, raw):
+    def __init__(self, raw: Any) -> None:
         self._raw = raw
 
-    def get(self, path, **kwargs):
+    def get(self, path: str, **kwargs: Any) -> _Response:
         return _Response(self._raw.get(path, **kwargs))
 
-    def _write(self, method, path, json_body=None, **kwargs):
+    def _write(
+        self, method: str, path: str, json_body: Any = None, **kwargs: Any
+    ) -> _Response:
         if json_body is not None:
             kwargs.setdefault("content_type", "application/json")
             return _Response(
@@ -110,31 +113,31 @@ class DjangoClient:
             )
         return _Response(getattr(self._raw, method)(path, **kwargs))
 
-    def post(self, path, json=None, **kwargs):
+    def post(self, path: str, json: Any = None, **kwargs: Any) -> _Response:
         return self._write("post", path, json_body=json, **kwargs)
 
-    def patch(self, path, json=None, **kwargs):
+    def patch(self, path: str, json: Any = None, **kwargs: Any) -> _Response:
         return self._write("patch", path, json_body=json, **kwargs)
 
-    def delete(self, path, **kwargs):
+    def delete(self, path: str, **kwargs: Any) -> _Response:
         return _Response(self._raw.delete(path, **kwargs))
 
 
 if EXAMPLE in ("django-ssr-memory-native", "django-ssr-memory-jinja"):
     from todos.store import reset_store
 
-    def reset():
+    def reset() -> None:
         reset_store()
 
 elif EXAMPLE == "django-api-memory-drf":
     from app.repository import reset_store
 
-    def reset():
+    def reset() -> None:
         reset_store()
 
 else:
 
-    def reset():
+    def reset() -> None:
         from app.models import Todo
         from django.db import connection
 

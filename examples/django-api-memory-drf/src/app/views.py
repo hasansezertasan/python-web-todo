@@ -1,5 +1,6 @@
 """DRF views for the Todo JSON API (in-memory store, no ORM)."""
 
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
@@ -17,11 +18,11 @@ NOT_FOUND = {"error": "Todo not found"}
 
 
 class TodoListCreateView(APIView):
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         data = TodoReadSerializer(repository.store.list(), many=True).data
         return Response(data, status=HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         serializer = TodoCreateSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=HTTP_422_UNPROCESSABLE_ENTITY)
@@ -33,14 +34,14 @@ class TodoListCreateView(APIView):
 
 
 class TodoDetailView(APIView):
-    def get(self, request, todo_id: int):
+    def get(self, request: Request, todo_id: int) -> Response:
         try:
             todo = repository.store.get(todo_id)
         except KeyError:
             return Response(NOT_FOUND, status=HTTP_404_NOT_FOUND)
         return Response(TodoReadSerializer(todo).data, status=HTTP_200_OK)
 
-    def patch(self, request, todo_id: int):
+    def patch(self, request: Request, todo_id: int) -> Response:
         try:
             repository.store.get(todo_id)
         except KeyError:
@@ -54,7 +55,7 @@ class TodoDetailView(APIView):
         )
         return Response(TodoReadSerializer(todo).data, status=HTTP_200_OK)
 
-    def delete(self, request, todo_id: int):
+    def delete(self, request: Request, todo_id: int) -> Response:
         try:
             repository.store.delete(todo_id)
         except KeyError:

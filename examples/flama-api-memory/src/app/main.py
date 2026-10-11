@@ -24,7 +24,7 @@ def _not_found() -> t.NoReturn:
 
 
 def _validation_error_to_422(
-    scope, receive, send, exc: exceptions.ValidationError
+    scope: t.Any, receive: t.Any, send: t.Any, exc: exceptions.ValidationError
 ) -> http.Response:
     # Flama reports schema-validation failures as 400 by default;
     # the shared JSON API contract expects 422, so remap them here.

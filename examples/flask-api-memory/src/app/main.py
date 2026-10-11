@@ -1,6 +1,6 @@
 """Todo JSON API with Flask and in-memory storage."""
 
-from flask import Flask, jsonify, request
+from flask import Flask, Response, jsonify, request
 
 from .models import Todo
 from .repository import InMemoryTodoRepository
@@ -19,11 +19,11 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Flask:
     app = Flask(__name__)
 
     @app.get("/todos")
-    def list_todos():
+    def list_todos() -> Response:
         return jsonify([_to_json(todo) for todo in repo.list()])
 
     @app.post("/todos")
-    def create_todo():
+    def create_todo() -> tuple[Response, int]:
         body = request.get_json(silent=True, cache=False) or {}
         title = body.get("title")
         if not _valid_title(title):
@@ -31,14 +31,14 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Flask:
         return jsonify(_to_json(repo.create(title=title))), 201
 
     @app.get("/todos/<int:todo_id>")
-    def get_todo(todo_id: int):
+    def get_todo(todo_id: int) -> Response | tuple[Response, int]:
         try:
             return jsonify(_to_json(repo.get(todo_id)))
         except KeyError:
             return jsonify({"error": "Todo not found"}), 404
 
     @app.patch("/todos/<int:todo_id>")
-    def update_todo(todo_id: int):
+    def update_todo(todo_id: int) -> Response | tuple[Response, int]:
         body = request.get_json(silent=True, cache=False) or {}
         title = body.get("title")
         done = body.get("done")
@@ -50,7 +50,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Flask:
             return jsonify({"error": "Todo not found"}), 404
 
     @app.delete("/todos/<int:todo_id>")
-    def delete_todo(todo_id: int):
+    def delete_todo(todo_id: int) -> Response | tuple[str, int]:
         try:
             repo.delete(todo_id)
         except KeyError:

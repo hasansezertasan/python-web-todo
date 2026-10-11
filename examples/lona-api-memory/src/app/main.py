@@ -8,6 +8,7 @@ receives the raw aiohttp request and may return ``lona.responses.JsonResponse``
 
 import os
 
+from aiohttp.web import Request as AiohttpRequest
 from aiohttp.web import Response as AiohttpResponse
 from lona import MATCH_ALL, JsonResponse, View
 from lona import App as LonaApp
@@ -35,7 +36,7 @@ def _parse_id(raw: str) -> int | None:
         return None
 
 
-async def _read_json(request) -> object:
+async def _read_json(request: AiohttpRequest) -> object:
     try:
         return await request.json()
     except Exception:
@@ -49,7 +50,9 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> LonaApp:
 
     @app.route("/todos", http_pass_through=True)
     class TodoCollectionView(View):
-        async def handle_request(self, request):
+        async def handle_request(
+            self, request: AiohttpRequest
+        ) -> JsonResponse | AiohttpResponse:
             if request.method == "GET":
                 return JsonResponse(data=[todo_to_dict(todo) for todo in repo.list()])
 
@@ -66,8 +69,8 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> LonaApp:
     @app.route("/todos/<todo_id>", http_pass_through=True)
     class TodoItemView(View):
         async def handle_request(  # noqa: PLR0911 — manual dispatch is branchy
-            self, request
-        ):
+            self, request: AiohttpRequest
+        ) -> JsonResponse | AiohttpResponse:
             # Lona's router matches the path but the raw aiohttp request
             # carries no route params, so the id is parsed off the path.
             todo_id = _parse_id(request.path.rsplit("/", 1)[-1])
@@ -112,7 +115,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> LonaApp:
 
     @app.route(MATCH_ALL, http_pass_through=True)
     class FallbackView(View):
-        async def handle_request(self, request):
+        async def handle_request(self, request: AiohttpRequest) -> JsonResponse:
             return JsonResponse(data={"detail": "Not found"}, status=404)
 
     return app

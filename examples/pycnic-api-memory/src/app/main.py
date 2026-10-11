@@ -23,10 +23,10 @@ class TodoCollectionHandler(Handler):
     def __init__(self, repo: InMemoryTodoRepository) -> None:
         self.repo = repo
 
-    def get(self):
+    def get(self) -> list[dict]:
         return [_to_json(todo) for todo in self.repo.list()]
 
-    def post(self):
+    def post(self) -> dict:
         title = self.request.data.get("title")
         if not _valid_title(title):
             # Pycnic ships no 422 error type, so set the status directly.
@@ -42,7 +42,7 @@ class TodoItemHandler(Handler):
     def __init__(self, repo: InMemoryTodoRepository) -> None:
         self.repo = repo
 
-    def get(self, todo_id: str):
+    def get(self, todo_id: str) -> dict:
         try:
             todo = self.repo.get(int(todo_id))
         except KeyError:
@@ -50,7 +50,7 @@ class TodoItemHandler(Handler):
             return {"error": "Todo not found"}
         return _to_json(todo)
 
-    def patch(self, todo_id: str):
+    def patch(self, todo_id: str) -> dict:
         body = self.request.data
         if "title" in body and not _valid_title(body.get("title")):
             self.response.status_code = 422
@@ -64,7 +64,7 @@ class TodoItemHandler(Handler):
             return {"error": "Todo not found"}
         return _to_json(todo)
 
-    def delete(self, todo_id: str):
+    def delete(self, todo_id: str) -> str:
         try:
             self.repo.delete(int(todo_id))
         except KeyError:

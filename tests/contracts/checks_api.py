@@ -4,7 +4,9 @@ Each check assumes a pristine store and a uniform client exposing
 ``get``/``post``/``patch``/``delete`` returning ``status_code`` + ``json()``.
 """
 
-OPENAPI_PATHS = {
+from typing import Any
+
+OPENAPI_PATHS: dict[str, str] = {
     "fastapi-api-memory": "/openapi.json",
     "fastapi-api-sqlite-sqlalchemy": "/openapi.json",
     "litestar-api-memory": "/schema/openapi.json",
@@ -13,13 +15,13 @@ OPENAPI_PATHS = {
 }
 
 
-def check_list_starts_empty(client):
+def check_list_starts_empty(client: Any) -> None:
     response = client.get("/todos")
     assert response.status_code == 200, response.status_code
     assert response.json() == []
 
 
-def check_crud_flow(client):
+def check_crud_flow(client: Any) -> None:
     created = client.post("/todos", json={"title": "Buy milk"})
     assert created.status_code == 201, created.status_code
     item = created.json()
@@ -37,7 +39,7 @@ def check_crud_flow(client):
     assert client.get(f"/todos/{todo_id}").status_code == 404
 
 
-def check_validation_errors(client):
+def check_validation_errors(client: Any) -> None:
     for payload in ({"title": ""}, {}):
         response = client.post("/todos", json=payload)
         assert response.status_code == 422, (payload, response.status_code)
@@ -49,7 +51,7 @@ def check_validation_errors(client):
     assert bad.json() is not None
 
 
-def check_unknown_id(client):
+def check_unknown_id(client: Any) -> None:
     for response in (
         client.get("/todos/9999"),
         client.patch("/todos/9999", json={"done": True}),
@@ -59,7 +61,9 @@ def check_unknown_id(client):
         assert response.json() is not None
 
 
-def check_openapi(client, schema_path, item_path="/todos/{todo_id}"):
+def check_openapi(
+    client: Any, schema_path: str, item_path: str = "/todos/{todo_id}"
+) -> None:
     spec = client.get(schema_path)
     assert spec.status_code == 200, spec.status_code
     paths = spec.json()["paths"]

@@ -37,7 +37,6 @@ target-version = "py311"
 select = ["ALL"]
 ignore = [
     "D",        # docstring-everything: low value across 35 agent-written examples
-    "ANN",      # annotations-everything: same; typed where it matters (pydantic)
     "CPY001",   # no license-header practice in this repo
     "COM812",   # conflicts with skip-magic-trailing-comma = true
     "PLC0415",  # lazy imports are the established pattern (servers in main(), path setup)
@@ -49,6 +48,7 @@ ignore = [
     "PLR2004",  # status-code literals in tests/handlers are idiomatic
     "INP001",   # src-layout namespace packages are deliberate
     "C901",     # complexity gates on demo handlers: cumbersome
+    "ANN401",   # explicit Any is honest (required for **kwargs annotations)
 ]
 
 [tool.ruff.lint.per-file-ignores]

@@ -1,6 +1,7 @@
 """Todo JSON API with Clastic and in-memory storage."""
 
 import json
+from typing import Any
 
 from clastic import DELETE, GET, POST, Application, Response, render_json
 from clastic.route import PATCH
@@ -17,7 +18,7 @@ def _valid_title(value: object) -> bool:
     return isinstance(value, str) and len(value) > 0
 
 
-def _read_json_body(request) -> dict:
+def _read_json_body(request: Any) -> dict:
     try:
         raw = request.get_data(as_text=True)
     except Exception:
@@ -46,11 +47,11 @@ def _parse_id(todo_id: str) -> int | None:
         return None
 
 
-def list_todos(store):
+def list_todos(store: InMemoryTodoRepository) -> list[dict]:
     return [_to_json(todo) for todo in store.list()]
 
 
-def create_todo(request, store):
+def create_todo(request: Any, store: InMemoryTodoRepository) -> Response:
     body = _read_json_body(request)
     title = body.get("title")
     if not _valid_title(title):
@@ -58,7 +59,7 @@ def create_todo(request, store):
     return _json_response(_to_json(store.create(title=title)), 201)
 
 
-def get_todo(store, todo_id):
+def get_todo(store: InMemoryTodoRepository, todo_id: str) -> dict | Response:
     parsed_id = _parse_id(todo_id)
     if parsed_id is None:
         return _not_found()
@@ -68,7 +69,9 @@ def get_todo(store, todo_id):
         return _not_found()
 
 
-def update_todo(request, store, todo_id):
+def update_todo(
+    request: Any, store: InMemoryTodoRepository, todo_id: str
+) -> dict | Response:
     parsed_id = _parse_id(todo_id)
     if parsed_id is None:
         return _not_found()
@@ -83,7 +86,7 @@ def update_todo(request, store, todo_id):
         return _not_found()
 
 
-def delete_todo(store, todo_id):
+def delete_todo(store: InMemoryTodoRepository, todo_id: str) -> Response:
     parsed_id = _parse_id(todo_id)
     if parsed_id is None:
         return _not_found()

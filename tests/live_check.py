@@ -17,6 +17,7 @@ import traceback
 import urllib.error
 import urllib.request
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tests" / "contracts"))
@@ -54,24 +55,24 @@ LIVE = {
 
 
 class R:
-    def __init__(self, status_code, payload, text=""):
+    def __init__(self, status_code: int, payload: Any, text: str = "") -> None:
         self.status_code = status_code
         self._payload = payload
         self._text = text
 
-    def json(self):
+    def json(self) -> Any:
         return self._payload
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self._text
 
 
 class HttpClient:
-    def __init__(self, base):
+    def __init__(self, base: str) -> None:
         self._base = base
 
-    def _request(self, method, path, body=None):
+    def _request(self, method: str, path: str, body: Any = None) -> R:
         data = json.dumps(body).encode() if body is not None else None
         request = urllib.request.Request(
             self._base + path,
@@ -92,16 +93,16 @@ class HttpClient:
             payload = None
         return R(status, payload, raw)
 
-    def get(self, path, **kwargs):
+    def get(self, path: str, **kwargs: Any) -> R:
         return self._request("GET", path)
 
-    def post(self, path, json=None, **kwargs):
+    def post(self, path: str, json: dict | None = None, **kwargs: Any) -> R:
         return self._request("POST", path, body=json)
 
-    def patch(self, path, json=None, **kwargs):
+    def patch(self, path: str, json: dict | None = None, **kwargs: Any) -> R:
         return self._request("PATCH", path, body=json)
 
-    def delete(self, path, **kwargs):
+    def delete(self, path: str, **kwargs: Any) -> R:
         return self._request("DELETE", path)
 
 

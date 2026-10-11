@@ -1,6 +1,7 @@
 """Todo JSON API with view.py and in-memory storage."""
 
 import os
+from collections.abc import AsyncIterator
 
 from view.core.app import App
 from view.core.headers import HTTPHeaders
@@ -58,7 +59,7 @@ def _parse_id(request: Request) -> int | None:
 
 
 def _no_content() -> Response:
-    async def _empty():
+    async def _empty() -> AsyncIterator[bytes]:
         return
         yield b""  # pragma: no cover
 
@@ -70,11 +71,11 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
     app = App()
 
     @app.get("/todos")
-    async def list_todos():
+    async def list_todos() -> JSONResponse:
         return JSONResponse.from_content([_to_json(todo) for todo in repo.list()])
 
     @app.post("/todos")
-    async def create_todo():
+    async def create_todo() -> JSONResponse:
         body = await _read_body(app.current_request())
         title = body.get("title")
         if not _valid_title(title):
@@ -84,7 +85,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
         )
 
     @app.get("/todos/{todo_id}")
-    async def get_todo():
+    async def get_todo() -> JSONResponse:
         todo_id = _parse_id(app.current_request())
         if todo_id is None:
             return _not_found()
@@ -94,7 +95,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
             return _not_found()
 
     @app.patch("/todos/{todo_id}")
-    async def update_todo():
+    async def update_todo() -> JSONResponse:
         request = app.current_request()
         todo_id = _parse_id(request)
         if todo_id is None:
@@ -114,7 +115,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
             return _not_found()
 
     @app.delete("/todos/{todo_id}")
-    async def delete_todo():
+    async def delete_todo() -> Response | JSONResponse:
         todo_id = _parse_id(app.current_request())
         if todo_id is None:
             return _not_found()

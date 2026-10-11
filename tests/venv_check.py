@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-WITH = {
+WITH: dict[str, list[str]] = {
     "blacksheep-api-memory": ["starlette", "httpx"],
     "responder-api-memory": ["starlette", "httpx"],
     "view-api-memory": ["starlette", "httpx"],

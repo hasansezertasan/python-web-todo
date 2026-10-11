@@ -10,6 +10,7 @@ import json
 import sys
 import traceback
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
 EXAMPLE = sys.argv[1]
@@ -54,20 +55,20 @@ OPENAPI = {"blacksheep-api-memory": "/openapi.json", "flama-api-memory": "/schem
 class R:
     """Uniform response: status_code + json()/text."""
 
-    def __init__(self, status_code, payload, text=""):
+    def __init__(self, status_code: int, payload: Any, text: str = "") -> None:
         self.status_code = status_code
         self._payload = payload
         self._text = text
 
-    def json(self):
+    def json(self) -> Any:
         return self._payload
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self._text
 
 
-def _payload(response):
+def _payload(response: Any) -> Any | None:
     """Best-effort parsed body across client shapes (.json method or property)."""
     try:
         candidate = response.json
@@ -79,7 +80,7 @@ def _payload(response):
         return None
 
 
-def _text(response):
+def _text(response: Any) -> str:
     text = getattr(response, "text", "")
     return text() if callable(text) else (text or "")
 
@@ -87,78 +88,90 @@ def _text(response):
 class SanicClient:
     """sanic-testing sync client returns (request, response) tuples."""
 
-    def __init__(self, app):
+    def __init__(self, app: Any) -> None:
         self._client = app.test_client
 
-    def _call(self, method, path, **kwargs):
+    def _call(self, method: str, path: str, **kwargs: Any) -> R:
         _, response = getattr(self._client, method)(path, **kwargs)
         return R(response.status, _payload(response), _text(response))
 
-    def get(self, path, **kwargs):
+    def get(self, path: str, **kwargs: Any) -> R:
         return self._call("get", path, **kwargs)
 
-    def post(self, path, **kwargs):
+    def post(self, path: str, **kwargs: Any) -> R:
         return self._call("post", path, **kwargs)
 
-    def patch(self, path, **kwargs):
+    def patch(self, path: str, **kwargs: Any) -> R:
         return self._call("patch", path, **kwargs)
 
-    def delete(self, path, **kwargs):
+    def delete(self, path: str, **kwargs: Any) -> R:
         return self._call("delete", path, **kwargs)
 
 
 class FalconClient:
     """falcon.testing.TestClient speaks simulate_*."""
 
-    def __init__(self, app):
+    def __init__(self, app: Any) -> None:
         from falcon import testing as falcon_testing
 
         self._client = falcon_testing.TestClient(app)
 
-    def _call(self, method, path, **kwargs):
+    def _call(self, method: str, path: str, **kwargs: Any) -> R:
         response = getattr(self._client, f"simulate_{method}")(path, **kwargs)
         return R(response.status_code, _payload(response), _text(response))
 
-    def get(self, path, **kwargs):
+    def get(self, path: str, **kwargs: Any) -> R:
         return self._call("get", path, **kwargs)
 
-    def post(self, path, **kwargs):
+    def post(self, path: str, **kwargs: Any) -> R:
         return self._call("post", path, **kwargs)
 
-    def patch(self, path, **kwargs):
+    def patch(self, path: str, **kwargs: Any) -> R:
         return self._call("patch", path, **kwargs)
 
-    def delete(self, path, **kwargs):
+    def delete(self, path: str, **kwargs: Any) -> R:
         return self._call("delete", path, **kwargs)
 
 
 class WebTestClient:
     """webtest.TestApp; status='*' accepts error statuses without raising."""
 
-    def __init__(self, app):
+    def __init__(self, app: Any) -> None:
         from webtest import TestApp
 
         self._client = TestApp(app)
 
-    def get(self, path, **kwargs):
+    def get(self, path: str, **kwargs: Any) -> R:
         response = self._client.get(path, status="*", **kwargs)
         return R(response.status_int, _payload(response), response.text)
 
-    def post(self, path, json=None, data=None, **kwargs):
+    def post(
+        self,
+        path: str,
+        json: dict | None = None,
+        data: dict | None = None,
+        **kwargs: Any,
+    ) -> R:
         if data is not None:
             response = self._client.post(path, params=data, status="*", **kwargs)
         else:
             response = self._client.post_json(path, json, status="*", **kwargs)
         return R(response.status_int, _payload(response), response.text)
 
-    def patch(self, path, json=None, data=None, **kwargs):
+    def patch(
+        self,
+        path: str,
+        json: dict | None = None,
+        data: dict | None = None,
+        **kwargs: Any,
+    ) -> R:
         if data is not None:
             response = self._client.patch(path, params=data, status="*", **kwargs)
         else:
             response = self._client.patch_json(path, json, status="*", **kwargs)
         return R(response.status_int, _payload(response), response.text)
 
-    def delete(self, path, **kwargs):
+    def delete(self, path: str, **kwargs: Any) -> R:
         response = self._client.delete(path, status="*", **kwargs)
         return R(response.status_int, _payload(response), response.text)
 
@@ -169,10 +182,10 @@ BottleClient = WebTestClient
 class ClasticClient:
     """Clastic's own local client (proper Response objects)."""
 
-    def __init__(self, app):
+    def __init__(self, app: Any) -> None:
         self._client = app.get_local_client()
 
-    def _call(self, method, path, **kwargs):
+    def _call(self, method: str, path: str, **kwargs: Any) -> R:
         response = getattr(self._client, method)(path, **kwargs)
         try:
             payload = json.loads(response.get_data(as_text=True) or "null")
@@ -180,74 +193,74 @@ class ClasticClient:
             payload = None
         return R(response.status_code, payload, response.get_data(as_text=True))
 
-    def get(self, path, **kwargs):
+    def get(self, path: str, **kwargs: Any) -> R:
         return self._call("get", path, **kwargs)
 
-    def post(self, path, **kwargs):
+    def post(self, path: str, **kwargs: Any) -> R:
         return self._call("post", path, **kwargs)
 
-    def patch(self, path, **kwargs):
+    def patch(self, path: str, **kwargs: Any) -> R:
         return self._call("patch", path, **kwargs)
 
-    def delete(self, path, **kwargs):
+    def delete(self, path: str, **kwargs: Any) -> R:
         return self._call("delete", path, **kwargs)
 
 
 class StarletteClient:
     """Sync Starlette TestClient without lifespan (e.g. BlackSheep's ASGI app)."""
 
-    def __init__(self, app):
+    def __init__(self, app: Any) -> None:
         from starlette.testclient import TestClient
 
         self._client = TestClient(app, raise_server_exceptions=False)
 
-    def _call(self, method, path, **kwargs):
+    def _call(self, method: str, path: str, **kwargs: Any) -> R:
         response = getattr(self._client, method)(path, **kwargs)
         return R(response.status_code, _payload(response), response.text)
 
-    def get(self, path, **kwargs):
+    def get(self, path: str, **kwargs: Any) -> R:
         return self._call("get", path, **kwargs)
 
-    def post(self, path, **kwargs):
+    def post(self, path: str, **kwargs: Any) -> R:
         return self._call("post", path, **kwargs)
 
-    def patch(self, path, **kwargs):
+    def patch(self, path: str, **kwargs: Any) -> R:
         return self._call("patch", path, **kwargs)
 
-    def delete(self, path, **kwargs):
+    def delete(self, path: str, **kwargs: Any) -> R:
         return self._call("delete", path, **kwargs)
 
 
 class QuartClient:
     """Quart's async test client (every call awaits)."""
 
-    def __init__(self, app):
+    def __init__(self, app: Any) -> None:
         self._client = app.test_client()
 
-    async def _call(self, method, path, **kwargs):
+    async def _call(self, method: str, path: str, **kwargs: Any) -> R:
         response = await getattr(self._client, method)(path, **kwargs)
         return R(response.status_code, await response.get_json())
 
-    async def get(self, path, **kwargs):
+    async def get(self, path: str, **kwargs: Any) -> R:
         return await self._call("get", path, **kwargs)
 
-    async def post(self, path, **kwargs):
+    async def post(self, path: str, **kwargs: Any) -> R:
         return await self._call("post", path, **kwargs)
 
-    async def patch(self, path, **kwargs):
+    async def patch(self, path: str, **kwargs: Any) -> R:
         return await self._call("patch", path, **kwargs)
 
-    async def delete(self, path, **kwargs):
+    async def delete(self, path: str, **kwargs: Any) -> R:
         return await self._call("delete", path, **kwargs)
 
 
 class AiohttpClient:
     """aiohttp TestClient/TestServer; started and closed per check."""
 
-    def __init__(self, raw):
+    def __init__(self, raw: Any) -> None:
         self._raw = raw
 
-    async def _call(self, method, path, **kwargs):
+    async def _call(self, method: str, path: str, **kwargs: Any) -> R:
         response = await getattr(self._raw, method)(path, **kwargs)
         try:
             payload = await response.json()
@@ -255,26 +268,26 @@ class AiohttpClient:
             payload = None
         return R(response.status, payload, await response.text())
 
-    async def get(self, path, **kwargs):
+    async def get(self, path: str, **kwargs: Any) -> R:
         return await self._call("get", path, **kwargs)
 
-    async def post(self, path, **kwargs):
+    async def post(self, path: str, **kwargs: Any) -> R:
         return await self._call("post", path, **kwargs)
 
-    async def patch(self, path, **kwargs):
+    async def patch(self, path: str, **kwargs: Any) -> R:
         return await self._call("patch", path, **kwargs)
 
-    async def delete(self, path, **kwargs):
+    async def delete(self, path: str, **kwargs: Any) -> R:
         return await self._call("delete", path, **kwargs)
 
 
-async def acheck_list_starts_empty(client):
+async def acheck_list_starts_empty(client: Any) -> None:
     response = await client.get("/todos")
     assert response.status_code == 200, response.status_code
     assert response.json() == []
 
 
-async def acheck_crud_flow(client):
+async def acheck_crud_flow(client: Any) -> None:
     created = await client.post("/todos", json={"title": "Buy milk"})
     assert created.status_code == 201, created.status_code
     item = created.json()
@@ -292,7 +305,7 @@ async def acheck_crud_flow(client):
     assert (await client.get(f"/todos/{todo_id}")).status_code == 404
 
 
-async def acheck_validation_errors(client):
+async def acheck_validation_errors(client: Any) -> None:
     for payload in ({"title": ""}, {}):
         response = await client.post("/todos", json=payload)
         assert response.status_code == 422, (payload, response.status_code)
@@ -304,7 +317,7 @@ async def acheck_validation_errors(client):
     assert bad.json() is not None
 
 
-async def acheck_unknown_id(client):
+async def acheck_unknown_id(client: Any) -> None:
     for response in (
         await client.get("/todos/9999"),
         await client.patch("/todos/9999", json={"done": True}),
@@ -329,10 +342,10 @@ class EmmettClient:
     Content-Type header (the content_type kwarg is dropped upstream).
     """
 
-    def __init__(self, app):
+    def __init__(self, app: Any) -> None:
         self._client = app.test_client()
 
-    def _call(self, method, path, **kwargs):
+    def _call(self, method: str, path: str, **kwargs: Any) -> R:
         json_body = kwargs.pop("json", None)
         if json_body is not None:
             response = getattr(self._client, method)(
@@ -348,26 +361,26 @@ class EmmettClient:
             payload = None
         return R(response.status, payload, response.data)
 
-    def get(self, path, **kwargs):
+    def get(self, path: str, **kwargs: Any) -> R:
         return self._call("get", path, **kwargs)
 
-    def post(self, path, **kwargs):
+    def post(self, path: str, **kwargs: Any) -> R:
         return self._call("post", path, **kwargs)
 
-    def patch(self, path, **kwargs):
+    def patch(self, path: str, **kwargs: Any) -> R:
         return self._call("patch", path, **kwargs)
 
-    def delete(self, path, **kwargs):
+    def delete(self, path: str, **kwargs: Any) -> R:
         return self._call("delete", path, **kwargs)
 
 
 class FlamaClient:
     """Flama's async client; response reading itself is sync."""
 
-    def __init__(self, raw):
+    def __init__(self, raw: Any) -> None:
         self._raw = raw
 
-    async def _call(self, method, path, **kwargs):
+    async def _call(self, method: str, path: str, **kwargs: Any) -> R:
         response = await getattr(self._raw, method)(path, **kwargs)
         try:
             payload = response.json()
@@ -375,16 +388,16 @@ class FlamaClient:
             payload = None
         return R(response.status_code, payload)
 
-    async def get(self, path, **kwargs):
+    async def get(self, path: str, **kwargs: Any) -> R:
         return await self._call("get", path, **kwargs)
 
-    async def post(self, path, **kwargs):
+    async def post(self, path: str, **kwargs: Any) -> R:
         return await self._call("post", path, **kwargs)
 
-    async def patch(self, path, **kwargs):
+    async def patch(self, path: str, **kwargs: Any) -> R:
         return await self._call("patch", path, **kwargs)
 
-    async def delete(self, path, **kwargs):
+    async def delete(self, path: str, **kwargs: Any) -> R:
         return await self._call("delete", path, **kwargs)
 
 
@@ -408,14 +421,14 @@ BUILDERS = {
 ASYNC_EXAMPLES = {"quart-api-memory", "aiohttp-api-memory", "flama-api-memory"}
 
 
-def _make_app():
+def _make_app() -> Any:
     app = create_app()
     if EXAMPLE == "view-api-memory":
         return app.asgi()
     return app
 
 
-def _run_sync(build, checks):
+def _run_sync(build: Any, checks: list[Any]) -> tuple[int, int]:
     failures = 0
     for check in checks:
         try:
@@ -429,7 +442,7 @@ def _run_sync(build, checks):
     return failures, len(checks)
 
 
-async def _run_async():
+async def _run_async() -> tuple[int, int]:
     failures = 0
     total = len(ASYNC_CHECKS)
     for check in ASYNC_CHECKS:

@@ -30,11 +30,11 @@ def create_app(  # noqa: PLR0915 — one factory wiring all five routes
     )
 
     @api.route("/todos", methods=["GET"])
-    def list_todos(req, resp) -> list[TodoRead]:
+    def list_todos(req: responder.Request, resp: responder.Response) -> list[TodoRead]:
         resp.media = [_todo_to_dict(todo) for todo in repo.list()]
 
     @api.route("/todos", methods=["POST"], status_code=201)
-    def create_todo(req, resp) -> TodoRead:
+    def create_todo(req: responder.Request, resp: responder.Response) -> TodoRead:
         try:
             payload = req.media_sync()
         except Exception:
@@ -49,7 +49,9 @@ def create_app(  # noqa: PLR0915 — one factory wiring all five routes
         return None
 
     @api.route("/todos/{todo_id}", methods=["GET"])
-    def get_todo(req, resp, *, todo_id) -> TodoRead:
+    def get_todo(
+        req: responder.Request, resp: responder.Response, *, todo_id: str
+    ) -> TodoRead:
         try:
             target = int(todo_id)
         except (TypeError, ValueError):
@@ -64,7 +66,9 @@ def create_app(  # noqa: PLR0915 — one factory wiring all five routes
         return None
 
     @api.route("/todos/{todo_id}", methods=["PATCH"])
-    def update_todo(req, resp, *, todo_id) -> TodoRead:
+    def update_todo(
+        req: responder.Request, resp: responder.Response, *, todo_id: str
+    ) -> TodoRead:
         try:
             target = int(todo_id)
         except (TypeError, ValueError):
@@ -98,7 +102,9 @@ def create_app(  # noqa: PLR0915 — one factory wiring all five routes
         return None
 
     @api.route("/todos/{todo_id}", methods=["DELETE"], status_code=204)
-    def delete_todo(req, resp, *, todo_id):
+    def delete_todo(
+        req: responder.Request, resp: responder.Response, *, todo_id: str
+    ) -> None:
         try:
             target = int(todo_id)
         except (TypeError, ValueError):

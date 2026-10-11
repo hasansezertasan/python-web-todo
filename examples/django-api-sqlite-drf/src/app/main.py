@@ -3,11 +3,12 @@
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 SRC_DIR = Path(__file__).resolve().parent.parent
 
 
-def create_app(db_path=None):
+def create_app(db_path: str | None = None) -> Any:
     """Configure Django, migrate, and return the WSGI application.
 
     Pass ``db_path`` (or set ``TODO_DB_PATH``) to point SQLite at a fresh

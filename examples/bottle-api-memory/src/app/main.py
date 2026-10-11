@@ -36,18 +36,18 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Bottle:
     app = Bottle()
 
     @app.get("/todos")
-    def list_todos():
+    def list_todos() -> str:
         return _json_body([_to_json(todo) for todo in repo.list()])
 
     @app.post("/todos")
-    def create_todo():
+    def create_todo() -> str:
         title = _request_body().get("title")
         if not _valid_title(title):
             return _json_body({"error": "title must be a non-empty string"}, 422)
         return _json_body(_to_json(repo.create(title=title)), 201)
 
     @app.get("/todos/<todo_id:int>")
-    def get_todo(todo_id: int):
+    def get_todo(todo_id: int) -> str:
         try:
             todo = repo.get(todo_id)
         except KeyError:
@@ -55,7 +55,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Bottle:
         return _json_body(_to_json(todo))
 
     @app.patch("/todos/<todo_id:int>")
-    def update_todo(todo_id: int):
+    def update_todo(todo_id: int) -> str:
         body = _request_body()
         title = body.get("title")
         done = body.get("done")
@@ -68,7 +68,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Bottle:
         return _json_body(_to_json(todo))
 
     @app.delete("/todos/<todo_id:int>")
-    def delete_todo(todo_id: int):
+    def delete_todo(todo_id: int) -> str:
         try:
             repo.delete(todo_id)
         except KeyError:

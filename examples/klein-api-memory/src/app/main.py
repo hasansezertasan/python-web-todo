@@ -4,6 +4,7 @@ import json
 import os
 
 from klein import Klein
+from twisted.web.server import Request
 
 from .models import Todo
 from .repository import InMemoryTodoRepository
@@ -17,7 +18,7 @@ def _valid_title(value: object) -> bool:
     return isinstance(value, str) and len(value) > 0
 
 
-def _request_body(request) -> dict:
+def _request_body(request: Request) -> dict:
     try:
         raw = request.content.read()
         body = json.loads(raw.decode("utf-8")) if raw else {}
@@ -26,17 +27,17 @@ def _request_body(request) -> dict:
     return body if isinstance(body, dict) else {}
 
 
-def _json(request, payload: object, status: int = 200):
+def _json(request: Request, payload: object, status: int = 200) -> str:
     request.setHeader("Content-Type", "application/json")
     request.setResponseCode(status)
     return json.dumps(payload)
 
 
-def _not_found(request):
+def _not_found(request: Request) -> str:
     return _json(request, {"error": "Todo not found"}, 404)
 
 
-def _parse_id(request, raw_id: str) -> int | None:
+def _parse_id(request: Request, raw_id: str) -> int | None:
     try:
         return int(raw_id)
     except (TypeError, ValueError):
@@ -49,18 +50,18 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Klein:
     app = Klein()
 
     @app.route("/todos", methods=["GET"])
-    def list_todos(request):
+    def list_todos(request: Request) -> str:
         return _json(request, [_to_json(todo) for todo in repo.list()])
 
     @app.route("/todos", methods=["POST"])
-    def create_todo(request):
+    def create_todo(request: Request) -> str:
         title = _request_body(request).get("title")
         if not _valid_title(title):
             return _json(request, {"error": "title must be a non-empty string"}, 422)
         return _json(request, _to_json(repo.create(title=title)), 201)
 
     @app.route("/todos/<todo_id>", methods=["GET"])
-    def get_todo(request, todo_id: str):
+    def get_todo(request: Request, todo_id: str) -> str:
         parsed = _parse_id(request, todo_id)
         if parsed is None:
             return _not_found(request)
@@ -71,7 +72,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Klein:
         return _json(request, _to_json(todo))
 
     @app.route("/todos/<todo_id>", methods=["PATCH"])
-    def update_todo(request, todo_id: str):
+    def update_todo(request: Request, todo_id: str) -> str:
         parsed = _parse_id(request, todo_id)
         if parsed is None:
             return _not_found(request)
@@ -87,7 +88,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Klein:
         return _json(request, _to_json(todo))
 
     @app.route("/todos/<todo_id>", methods=["DELETE"])
-    def delete_todo(request, todo_id: str):
+    def delete_todo(request: Request, todo_id: str) -> bytes:
         parsed = _parse_id(request, todo_id)
         if parsed is None:
             return _not_found(request)

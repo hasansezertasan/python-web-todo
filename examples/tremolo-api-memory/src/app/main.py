@@ -2,6 +2,7 @@
 
 import json
 import os
+from typing import Any
 
 from tremolo import Application
 
@@ -17,7 +18,7 @@ def _valid_title(value: object) -> bool:
     return isinstance(value, str) and len(value) > 0
 
 
-async def _request_body(request) -> dict:
+async def _request_body(request: Any) -> dict:
     try:
         raw = await request.body()
     except Exception:
@@ -31,17 +32,17 @@ async def _request_body(request) -> dict:
     return body if isinstance(body, dict) else {}
 
 
-def _json(response, payload: object, status: int = 200, reason: str = "OK") -> str:
+def _json(response: Any, payload: object, status: int = 200, reason: str = "OK") -> str:
     response.set_status(status, reason)
     response.set_content_type("application/json")
     return json.dumps(payload)
 
 
-def _not_found(response) -> str:
+def _not_found(response: Any) -> str:
     return _json(response, {"error": "Todo not found"}, 404, "Not Found")
 
 
-def _invalid_title(response) -> str:
+def _invalid_title(response: Any) -> str:
     return _json(
         response,
         {"error": "title must be a non-empty string"},
@@ -50,7 +51,7 @@ def _invalid_title(response) -> str:
     )
 
 
-def _parse_id(todo_id) -> int | None:
+def _parse_id(todo_id: bytes | str) -> int | None:
     if isinstance(todo_id, (bytes, bytearray)):
         todo_id = bytes(todo_id).decode("latin-1")
     try:
@@ -67,13 +68,13 @@ class TodosView:
     The store arrives via route options into __init__ (Tremolo idiom).
     """
 
-    def __init__(self, repo: InMemoryTodoRepository, **kwargs) -> None:
+    def __init__(self, repo: InMemoryTodoRepository, **kwargs: Any) -> None:
         self.repo = repo
 
-    async def get(self, response, **server) -> str:
+    async def get(self, response: Any, **server: Any) -> str:
         return _json(response, [_to_json(todo) for todo in self.repo.list()])
 
-    async def post(self, request, response, **server) -> str:
+    async def post(self, request: Any, response: Any, **server: Any) -> str:
         title = (await _request_body(request)).get("title")
         if not _valid_title(title):
             return _invalid_title(response)
@@ -84,10 +85,12 @@ class TodoDetailView:
     """Item resource. The [^/]+ segment keeps non-numeric ids on this
     route so they 404 with a JSON body instead of Tremolo's default page."""
 
-    def __init__(self, repo: InMemoryTodoRepository, **kwargs) -> None:
+    def __init__(self, repo: InMemoryTodoRepository, **kwargs: Any) -> None:
         self.repo = repo
 
-    async def get(self, response, todo_id=b"", **server) -> str:
+    async def get(
+        self, response: Any, todo_id: bytes | str = b"", **server: Any
+    ) -> str:
         parsed = _parse_id(todo_id)
         if parsed is None:
             return _not_found(response)
@@ -97,7 +100,9 @@ class TodoDetailView:
             return _not_found(response)
         return _json(response, _to_json(todo))
 
-    async def patch(self, request, response, todo_id=b"", **server) -> str:
+    async def patch(
+        self, request: Any, response: Any, todo_id: bytes | str = b"", **server: Any
+    ) -> str:
         parsed = _parse_id(todo_id)
         if parsed is None:
             return _not_found(response)
@@ -112,7 +117,9 @@ class TodoDetailView:
             return _not_found(response)
         return _json(response, _to_json(todo))
 
-    async def delete(self, response, todo_id=b"", **server) -> bytes:
+    async def delete(
+        self, response: Any, todo_id: bytes | str = b"", **server: Any
+    ) -> bytes:
         parsed = _parse_id(todo_id)
         if parsed is None:
             return _not_found(response).encode()

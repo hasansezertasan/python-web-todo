@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from flask import Flask, jsonify, request
+from flask import Flask, Response, jsonify, request
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -39,13 +39,13 @@ def create_app(db_url: str | None = None) -> Flask:
     app = Flask(__name__)
 
     @app.get("/todos")
-    def list_todos():
+    def list_todos() -> Response:
         with sessions() as session:
             todos = session.scalars(select(Todo).order_by(Todo.id)).all()
             return jsonify([_to_json(todo) for todo in todos])
 
     @app.post("/todos")
-    def create_todo():
+    def create_todo() -> tuple[Response, int]:
         body = request.get_json(silent=True, cache=False) or {}
         title = body.get("title")
         if not _valid_title(title):
@@ -57,7 +57,7 @@ def create_app(db_url: str | None = None) -> Flask:
             return jsonify(_to_json(todo)), 201
 
     @app.get("/todos/<int:todo_id>")
-    def get_todo(todo_id: int):
+    def get_todo(todo_id: int) -> Response | tuple[Response, int]:
         with sessions() as session:
             todo = session.get(Todo, todo_id)
             if todo is None:
@@ -65,7 +65,7 @@ def create_app(db_url: str | None = None) -> Flask:
             return jsonify(_to_json(todo))
 
     @app.patch("/todos/<int:todo_id>")
-    def update_todo(todo_id: int):
+    def update_todo(todo_id: int) -> Response | tuple[Response, int]:
         body = request.get_json(silent=True, cache=False) or {}
         title = body.get("title")
         done = body.get("done")
@@ -83,7 +83,7 @@ def create_app(db_url: str | None = None) -> Flask:
             return jsonify(_to_json(todo))
 
     @app.delete("/todos/<int:todo_id>")
-    def delete_todo(todo_id: int):
+    def delete_todo(todo_id: int) -> Response | tuple[str, int]:
         with sessions() as session:
             todo = session.get(Todo, todo_id)
             if todo is None:

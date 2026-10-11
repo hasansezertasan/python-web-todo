@@ -1,5 +1,7 @@
 """Server-rendered todo app with TurboGears, Genshi, and in-memory storage."""
 
+from typing import Any
+
 from tg import TGController, abort, expose, redirect, request, response
 from tg.configuration import AppConfig
 
@@ -16,7 +18,7 @@ class TodoItemController(TGController):
         self._todo_id = todo_id
 
     @expose()
-    def toggle(self):
+    def toggle(self) -> None:
         try:
             self._repo.toggle(self._todo_id)
         except KeyError:
@@ -24,7 +26,7 @@ class TodoItemController(TGController):
         redirect("/")
 
     @expose()
-    def delete(self):
+    def delete(self) -> None:
         try:
             self._repo.delete(self._todo_id)
         except KeyError:
@@ -39,7 +41,7 @@ class TodosController(TGController):
         self._repo = repo
 
     @expose()
-    def _lookup(self, todo_id, *remainder):
+    def _lookup(self, todo_id: str, *remainder: str) -> tuple[Any, tuple]:
         try:
             parsed_id = int(todo_id)
         except ValueError:
@@ -47,7 +49,7 @@ class TodosController(TGController):
         return TodoItemController(self._repo, parsed_id), remainder
 
     @expose("app.templates.index")  # noqa: RET503 — paths end in redirect(), which raises
-    def index(self):
+    def index(self) -> dict:
         if request.method == "POST":
             title = (request.POST.get("title") or "").strip()
             if not title:
@@ -64,11 +66,11 @@ class RootController(TGController):
         self.todos = TodosController(repo)
 
     @expose("app.templates.index")
-    def index(self):
+    def index(self) -> dict:
         return {"todos": self._repo.list(), "error": None}
 
 
-def create_app(repo: InMemoryTodoRepository | None = None):
+def create_app(repo: InMemoryTodoRepository | None = None) -> Any:
     """Application factory returning the WSGI app with a fresh store."""
     repo = repo or InMemoryTodoRepository()
     config = AppConfig(minimal=True, root_controller=RootController(repo))

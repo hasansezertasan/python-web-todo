@@ -4,7 +4,7 @@ import json
 import os
 
 from twisted.web.resource import Resource
-from twisted.web.server import Site
+from twisted.web.server import Request, Site
 
 from .models import Todo
 from .repository import InMemoryTodoRepository
@@ -18,7 +18,7 @@ def _valid_title(value: object) -> bool:
     return isinstance(value, str) and len(value) > 0
 
 
-def _request_body(request) -> dict:
+def _request_body(request: Request) -> dict:
     try:
         raw = request.content.read()
         body = json.loads(raw.decode("utf-8")) if raw else {}
@@ -27,13 +27,13 @@ def _request_body(request) -> dict:
     return body if isinstance(body, dict) else {}
 
 
-def _json_response(request, payload: object, status: int = 200) -> bytes:
+def _json_response(request: Request, payload: object, status: int = 200) -> bytes:
     request.setHeader(b"Content-Type", b"application/json")
     request.setResponseCode(status)
     return json.dumps(payload).encode("utf-8")
 
 
-def _not_found(request) -> bytes:
+def _not_found(request: Request) -> bytes:
     return _json_response(request, {"error": "Todo not found"}, 404)
 
 
@@ -46,7 +46,7 @@ class _UnknownResource(Resource):
         super().__init__()
         self._message = message
 
-    def render(self, request):
+    def render(self, request: Request) -> bytes:
         return _json_response(request, {"error": self._message}, 404)
 
 
@@ -60,14 +60,14 @@ class TodoItemResource(Resource):
         self._repo = repo
         self._todo_id = todo_id
 
-    def render_GET(self, request):
+    def render_GET(self, request: Request) -> bytes:
         try:
             todo = self._repo.get(self._todo_id)
         except KeyError:
             return _not_found(request)
         return _json_response(request, _to_json(todo))
 
-    def render_PATCH(self, request):
+    def render_PATCH(self, request: Request) -> bytes:
         body = _request_body(request)
         title = body.get("title")
         done = body.get("done")
@@ -81,7 +81,7 @@ class TodoItemResource(Resource):
             return _not_found(request)
         return _json_response(request, _to_json(todo))
 
-    def render_DELETE(self, request):
+    def render_DELETE(self, request: Request) -> bytes:
         try:
             self._repo.delete(self._todo_id)
         except KeyError:
@@ -97,10 +97,10 @@ class TodosResource(Resource):
         super().__init__()
         self._repo = repo
 
-    def render_GET(self, request):
+    def render_GET(self, request: Request) -> bytes:
         return _json_response(request, [_to_json(todo) for todo in self._repo.list()])
 
-    def render_POST(self, request):
+    def render_POST(self, request: Request) -> bytes:
         title = _request_body(request).get("title")
         if not _valid_title(title):
             return _json_response(
@@ -108,7 +108,7 @@ class TodosResource(Resource):
             )
         return _json_response(request, _to_json(self._repo.create(title=title)), 201)
 
-    def getChild(self, path, request):
+    def getChild(self, path: bytes, request: Request) -> Resource:
         if path == b"":
             return self
         try:
@@ -125,14 +125,14 @@ class RootResource(Resource):
         super().__init__()
         self._todos = TodosResource(repo)
 
-    def getChild(self, path, request):
+    def getChild(self, path: bytes, request: Request) -> Resource:
         if path == b"":
             return self
         if path == b"todos":
             return self._todos
         return _UnknownResource()
 
-    def render_GET(self, request):
+    def render_GET(self, request: Request) -> bytes:
         return _json_response(request, {"error": "Not found"}, 404)
 
 

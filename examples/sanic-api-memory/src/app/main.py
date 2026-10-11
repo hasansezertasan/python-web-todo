@@ -2,8 +2,8 @@
 
 import itertools
 
-from sanic import Sanic
-from sanic.response import empty, json
+from sanic import Request, Sanic
+from sanic.response import HTTPResponse, empty, json
 
 from .models import Todo
 from .repository import InMemoryTodoRepository
@@ -22,7 +22,7 @@ def _valid_title(value: object) -> bool:
     return isinstance(value, str) and len(value) > 0
 
 
-def _body(request) -> dict:
+def _body(request: Request) -> dict:
     try:
         data = request.json
     except Exception:
@@ -36,25 +36,25 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Sanic:
     app.ctx.repo = repo
 
     @app.get("/todos")
-    async def list_todos(request):
+    async def list_todos(request: Request) -> HTTPResponse:
         return json([_to_json(todo) for todo in repo.list()])
 
     @app.post("/todos")
-    async def create_todo(request):
+    async def create_todo(request: Request) -> HTTPResponse:
         title = _body(request).get("title")
         if not _valid_title(title):
             return json({"error": "title must be a non-empty string"}, status=422)
         return json(_to_json(repo.create(title=title)), status=201)
 
     @app.get("/todos/<todo_id:int>")
-    async def get_todo(request, todo_id: int):
+    async def get_todo(request: Request, todo_id: int) -> HTTPResponse:
         try:
             return json(_to_json(repo.get(todo_id)))
         except KeyError:
             return json({"error": "Todo not found"}, status=404)
 
     @app.patch("/todos/<todo_id:int>")
-    async def update_todo(request, todo_id: int):
+    async def update_todo(request: Request, todo_id: int) -> HTTPResponse:
         body = _body(request)
         title = body.get("title")
         done = body.get("done")
@@ -66,7 +66,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Sanic:
             return json({"error": "Todo not found"}, status=404)
 
     @app.delete("/todos/<todo_id:int>")
-    async def delete_todo(request, todo_id: int):
+    async def delete_todo(request: Request, todo_id: int) -> HTTPResponse:
         try:
             repo.delete(todo_id)
         except KeyError:

@@ -1,6 +1,6 @@
 """Server-rendered todo app with Flask, Jinja, and in-memory storage."""
 
-from flask import Flask, abort, redirect, render_template, request, url_for
+from flask import Flask, Response, abort, redirect, render_template, request, url_for
 
 from .repository import InMemoryTodoRepository
 
@@ -12,11 +12,11 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Flask:
     app = Flask(__name__)
 
     @app.get("/")
-    def index():
+    def index() -> str:
         return render_template("index.html", todos=repo.list(), error=None)
 
     @app.post("/todos")
-    def add_todo():
+    def add_todo() -> tuple[str, int] | Response:
         title = (request.form.get("title") or "").strip()
         if not title:
             return (
@@ -29,7 +29,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Flask:
         return redirect(url_for("index"))
 
     @app.post("/todos/<int:todo_id>/toggle")
-    def toggle_todo(todo_id: int):
+    def toggle_todo(todo_id: int) -> Response:
         try:
             repo.toggle(todo_id)
         except KeyError:
@@ -37,7 +37,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Flask:
         return redirect(url_for("index"))
 
     @app.post("/todos/<int:todo_id>/delete")
-    def delete_todo(todo_id: int):
+    def delete_todo(todo_id: int) -> Response:
         try:
             repo.delete(todo_id)
         except KeyError:

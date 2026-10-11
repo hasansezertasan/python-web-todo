@@ -8,6 +8,7 @@ through ``quixote.get_request()``/``quixote.get_response()``, and the stock
 
 import json
 import os
+from collections.abc import Callable
 from typing import ClassVar
 from wsgiref.simple_server import make_server
 
@@ -79,7 +80,7 @@ class TodosDirectory(Directory):
         # instead of Quixote's stock redirect-to-trailing-slash.
         return self._collection()
 
-    def _q_lookup(self, component: str):
+    def _q_lookup(self, component: str) -> Callable[[], str]:
         if component == "":
             # Trailing slash (/todos/): the same collection resource.
             return self._collection

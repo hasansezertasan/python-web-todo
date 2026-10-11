@@ -2,7 +2,7 @@
 
 import os
 
-from robyn import Response, Robyn, jsonify
+from robyn import Request, Response, Robyn, jsonify
 
 from .models import Todo
 from .repository import InMemoryTodoRepository
@@ -19,7 +19,7 @@ def _valid_title(value: object) -> bool:
     return isinstance(value, str) and len(value) > 0
 
 
-def _body(request) -> dict:
+def _body(request: Request) -> dict:
     try:
         data = request.json()
     except Exception:
@@ -31,7 +31,7 @@ def _error(status_code: int, message: str) -> Response:
     return Response(status_code, JSON_HEADERS, jsonify({"detail": message}))
 
 
-def _todo_id(request) -> int | None:
+def _todo_id(request: Request) -> int | None:
     try:
         return int(request.path_params.get("id", ""))
     except (TypeError, ValueError):
@@ -43,18 +43,18 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Robyn:
     app = Robyn(__file__)
 
     @app.get("/todos", response_model=list[TodoRead])
-    async def list_todos(request):
+    async def list_todos(request: Request) -> list[dict]:
         return [_to_json(todo) for todo in repo.list()]
 
     @app.post("/todos", status_code=201, response_model=TodoRead)
-    async def create_todo(request):
+    async def create_todo(request: Request) -> dict | Response:
         title = _body(request).get("title")
         if not _valid_title(title):
             return _error(422, "title must be a non-empty string")
         return _to_json(repo.create(title=title))
 
     @app.get("/todos/:id", response_model=TodoRead)
-    async def get_todo(request):
+    async def get_todo(request: Request) -> dict | Response:
         todo_id = _todo_id(request)
         if todo_id is None:
             return _error(404, "Todo not found")
@@ -64,7 +64,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Robyn:
             return _error(404, "Todo not found")
 
     @app.patch("/todos/:id", response_model=TodoRead)
-    async def update_todo(request):
+    async def update_todo(request: Request) -> dict | Response:
         todo_id = _todo_id(request)
         if todo_id is None:
             return _error(404, "Todo not found")
@@ -81,7 +81,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Robyn:
             return _error(404, "Todo not found")
 
     @app.delete("/todos/:id", status_code=204)
-    async def delete_todo(request):
+    async def delete_todo(request: Request) -> Response:
         todo_id = _todo_id(request)
         if todo_id is None:
             return _error(404, "Todo not found")

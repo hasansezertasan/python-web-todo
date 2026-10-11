@@ -14,7 +14,7 @@ def _item(todo: Todo) -> dict:
     return {"id": todo.id, "title": todo.title, "done": todo.done}
 
 
-def _invalid_title(title) -> bool:
+def _invalid_title(title: object) -> bool:
     return not isinstance(title, str) or title == ""
 
 
@@ -25,12 +25,12 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
 
     @app.route("/todos", methods="get")
     @service.json
-    async def list_todos():
+    async def list_todos() -> list[dict]:
         return [_item(todo) for todo in repo.list()]
 
     @app.route("/todos", methods="post")
     @service.json
-    async def create_todo():
+    async def create_todo() -> dict | None:
         payload = await request.body_params
         if _invalid_title(payload.title):
             response.status = 422
@@ -40,7 +40,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
 
     @app.route("/todos/<int:todo_id>", methods="get")
     @service.json
-    async def get_todo(todo_id: int):
+    async def get_todo(todo_id: int) -> dict | None:
         try:
             todo = repo.get(todo_id)
         except KeyError:
@@ -50,7 +50,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
 
     @app.route("/todos/<int:todo_id>", methods="patch")
     @service.json
-    async def update_todo(todo_id: int):
+    async def update_todo(todo_id: int) -> dict | None:
         payload = await request.body_params
         title = payload.title if "title" in payload else None
         done = payload.done if "done" in payload else None
@@ -69,7 +69,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
 
     @app.route("/todos/<int:todo_id>", methods="delete")
     @service.json
-    async def delete_todo(todo_id: int):
+    async def delete_todo(todo_id: int) -> None:
         try:
             repo.delete(todo_id)
         except KeyError:

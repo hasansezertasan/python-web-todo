@@ -1,6 +1,6 @@
 """Todo JSON API with Muffin and in-memory storage."""
 
-from muffin import Application, Response, ResponseJSON
+from muffin import Application, Request, Response, ResponseJSON
 
 from .models import Todo
 from .repository import InMemoryTodoRepository
@@ -14,7 +14,7 @@ def _valid_title(value: object) -> bool:
     return isinstance(value, str) and len(value) > 0
 
 
-async def _body(request) -> dict:
+async def _body(request: Request) -> dict:
     """Parsed JSON object, or {} when the body is missing/invalid.
 
     Muffin's ``request.json()`` raises ``ASGIDecodeError`` on an empty body,
@@ -32,11 +32,11 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Application:
     app = Application()
 
     @app.route("/todos", methods=["GET"])
-    async def list_todos(request):
+    async def list_todos(request: Request) -> list[dict]:
         return [_to_json(todo) for todo in repo.list()]
 
     @app.route("/todos", methods=["POST"])
-    async def create_todo(request):
+    async def create_todo(request: Request) -> tuple[int, dict] | ResponseJSON:
         body = await _body(request)
         title = body.get("title")
         if not _valid_title(title):
@@ -46,7 +46,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Application:
         return 201, _to_json(repo.create(title=title))
 
     @app.route("/todos/{todo_id:int}", methods=["GET"])
-    async def get_todo(request):
+    async def get_todo(request: Request) -> dict | ResponseJSON:
         todo_id = request.path_params["todo_id"]
         try:
             return _to_json(repo.get(todo_id))
@@ -54,7 +54,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Application:
             return ResponseJSON({"error": "Todo not found"}, status_code=404)
 
     @app.route("/todos/{todo_id:int}", methods=["PATCH"])
-    async def update_todo(request):
+    async def update_todo(request: Request) -> dict | ResponseJSON:
         todo_id = request.path_params["todo_id"]
         body = await _body(request)
         title = body.get("title")
@@ -69,7 +69,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Application:
             return ResponseJSON({"error": "Todo not found"}, status_code=404)
 
     @app.route("/todos/{todo_id:int}", methods=["DELETE"])
-    async def delete_todo(request):
+    async def delete_todo(request: Request) -> Response | ResponseJSON:
         todo_id = request.path_params["todo_id"]
         try:
             repo.delete(todo_id)

@@ -3,7 +3,13 @@
 import json
 import os
 
-from wheezy.http import HTTPResponse, WSGIApplication, json_response, method_not_allowed
+from wheezy.http import (
+    HTTPRequest,
+    HTTPResponse,
+    WSGIApplication,
+    json_response,
+    method_not_allowed,
+)
 from wheezy.http.response import HTTP_STATUS
 from wheezy.routing import url
 from wheezy.web.handlers import MethodHandler
@@ -36,7 +42,7 @@ def _error(message: str, status: int) -> HTTPResponse:
     return _json({"error": message}, status)
 
 
-def _request_body(request) -> dict:
+def _request_body(request: HTTPRequest) -> dict:
     try:
         length = int(request.environ.get("CONTENT_LENGTH") or 0)
     except (TypeError, ValueError):
@@ -50,7 +56,7 @@ def _request_body(request) -> dict:
     return body if isinstance(body, dict) else {}
 
 
-def _todo_id(route_args) -> int | None:
+def _todo_id(route_args: dict) -> int | None:
     try:
         return int(route_args["todo_id"])
     except (KeyError, TypeError, ValueError):
@@ -64,10 +70,10 @@ class TodosHandler(MethodHandler):
     def repo(self) -> InMemoryTodoRepository:
         return self.options["todo_repo"]
 
-    def get(self):
+    def get(self) -> HTTPResponse:
         return _json([_to_json(todo) for todo in self.repo.list()])
 
-    def post(self):
+    def post(self) -> HTTPResponse:
         title = _request_body(self.request).get("title")
         if not _valid_title(title):
             return _error("title must be a non-empty string", 422)
@@ -85,7 +91,7 @@ class TodoItemHandler(MethodHandler):
     def repo(self) -> InMemoryTodoRepository:
         return self.options["todo_repo"]
 
-    def __call__(self):
+    def __call__(self) -> HTTPResponse:
         method = self.request.method
         if method == "GET":
             response = self.get()
@@ -99,7 +105,7 @@ class TodoItemHandler(MethodHandler):
             response.cookies.extend(self.cookies)
         return response
 
-    def get(self):
+    def get(self) -> HTTPResponse:
         todo_id = _todo_id(self.route_args)
         if todo_id is None:
             return _error("Todo not found", 404)
@@ -109,7 +115,7 @@ class TodoItemHandler(MethodHandler):
             return _error("Todo not found", 404)
         return _json(_to_json(todo))
 
-    def patch(self):
+    def patch(self) -> HTTPResponse:
         todo_id = _todo_id(self.route_args)
         if todo_id is None:
             return _error("Todo not found", 404)
@@ -124,7 +130,7 @@ class TodoItemHandler(MethodHandler):
             return _error("Todo not found", 404)
         return _json(_to_json(todo))
 
-    def delete(self):
+    def delete(self) -> HTTPResponse:
         todo_id = _todo_id(self.route_args)
         if todo_id is None:
             return _error("Todo not found", 404)
