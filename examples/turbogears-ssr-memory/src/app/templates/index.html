@@ -1,0 +1,32 @@
+<html xmlns:py="http://genshi.edgewall.org/">
+  <head>
+    <meta charset="utf-8" />
+    <title>Todo List</title>
+  </head>
+  <body>
+    <h1>Todo List</h1>
+
+    <p py:if="error" role="alert">${error}</p>
+
+    <form method="post" action="/todos">
+      <label for="title">New todo</label>
+      <input id="title" name="title" type="text" required="required" />
+      <button type="submit">Add</button>
+    </form>
+
+    <ul>
+      <li py:for="todo in todos">
+        <span>${todo.title}</span>
+        <span py:if="todo.done">done</span><span py:if="not todo.done">not done</span>
+        <form method="post" action="/todos/${todo.id}/toggle">
+          <button py:if="todo.done" type="submit">Mark not done</button>
+          <button py:if="not todo.done" type="submit">Mark done</button>
+        </form>
+        <form method="post" action="/todos/${todo.id}/delete">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+      <li py:if="not todos">No todos yet.</li>
+    </ul>
+  </body>
+</html>

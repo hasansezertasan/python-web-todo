@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Todo List</title>
+</head>
+<body>
+  <h1>Todo List</h1>
+
+  {% if error %}
+  <p role="alert">{{ error }}</p>
+  {% endif %}
+
+  <form method="post" action="{% url 'todo-add' %}">
+    <label for="id-title">New todo</label>
+    <input id="id-title" type="text" name="title" value="">
+    <button type="submit">Add</button>
+  </form>
+
+  <ul>
+    {% for todo in todos %}
+    <li>
+      <span>{{ todo.title }}</span>
+      {% if todo.done %}
+      <span>done</span>
+      {% else %}
+      <span>not done</span>
+      {% endif %}
+      <form method="post" action="{% url 'todo-toggle' todo.id %}" style="display:inline">
+        {% if todo.done %}
+        <button type="submit">Mark not done</button>
+        {% else %}
+        <button type="submit">Mark done</button>
+        {% endif %}
+      </form>
+      <form method="post" action="{% url 'todo-delete' todo.id %}" style="display:inline">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+    {% empty %}
+    <li>No todos yet.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

@@ -1,0 +1,23 @@
+version = 1
+revision = 5
+requires-python = ">=3.10"
+
+[[package]]
+name = "circuits"
+version = "3.2.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/b3/f9/daa4fff4c1c350bd96835c591773ea517c6147b93c5b937d5c0dce91d097/circuits-3.2.5.tar.gz", hash = "sha256:867cbfc692a1aa45cf0aada1487988411bffb0271601f57712e5cccf3caf6034", size = 191821, upload-time = "2026-10-05T23:26:47.435Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/85/7c/00ed61f322c96519651e8031bf147b03b90a9cf74f0c8313f497fa37c210/circuits-3.2.5-py3-none-any.whl", hash = "sha256:49a420b044ccb1def0434f75f2451472a110cabfbd0a1628eb0b4083986fe2ba", size = 152069, upload-time = "2026-10-05T23:26:46.186Z" },
+]
+
+[[package]]
+name = "circuits-api-memory"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "circuits" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "circuits", specifier = ">=3.2" }]

@@ -1,0 +1,23 @@
+version = 1
+revision = 5
+requires-python = ">=3.10"
+
+[[package]]
+name = "tremolo"
+version = "0.5.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f7/af/4316321c651c891432b43c59d162bde21a50e4e7e3c3cb1516329be17e01/tremolo-0.5.3.tar.gz", hash = "sha256:1c5a9196e04970252b54b57cabc87b963d44913a2438e118da7e6ddf54517d18", size = 41496, upload-time = "2026-10-01T12:38:58.549Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9e/07/355736f6d0c6b3419b2d274ecbc2ffc09af51950b7d4d358e6fa069552aa/tremolo-0.5.3-py3-none-any.whl", hash = "sha256:7d75dd519e3568f58e61ed9fe7294df18bf32686457f6f1fb5ca7d5ff14f2757", size = 49000, upload-time = "2026-10-01T12:38:57.013Z" },
+]
+
+[[package]]
+name = "tremolo-api-memory"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "tremolo" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "tremolo", specifier = ">=0.5" }]

@@ -1,0 +1,143 @@
+version = 1
+revision = 5
+requires-python = ">=3.11"
+resolution-markers = [
+    "python_full_version >= '3.13'",
+    "python_full_version < '3.13'",
+]
+
+[[package]]
+name = "beautifulsoup4"
+version = "4.15.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "soupsieve" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/43/65/318323f98dbee45d42dff61d8f047181bc6f2268a9068cfad035a46be5af/beautifulsoup4-4.15.0.tar.gz", hash = "sha256:288e3ca7d54b06f2ac191970bc275c1939cb46d450b255bf6718b04aa37ab4f7", size = 632571, upload-time = "2026-06-07T16:44:20.453Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/88/c6/92fcd42f1ba33e1184263f25bfabf3d27c383410470f169e4b8163bf9c17/beautifulsoup4-4.15.0-py3-none-any.whl", hash = "sha256:d6f88de62e1d4e38ecb1077eb9724cd0eff29d2a08ca16a401e9b9e93f117cf9", size = 109924, upload-time = "2026-06-07T16:44:21.566Z" },
+]
+
+[[package]]
+name = "dectate"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/01/e8/aa59ec646b6d0021688e5b501df84a2e92b043bb48fbc7f186567efd6456/dectate-1.0.0.tar.gz", hash = "sha256:9955243fcd1abd9b8bbd6d985094235aa97f32f54d19788bb5ad677077102b44", size = 63780, upload-time = "2026-10-10T14:32:40.001Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/af/e8/1fc6688945b13369e73ad52baa1d00d168102e94fe045b09fd15b9577b69/dectate-1.0.0-py3-none-any.whl", hash = "sha256:b752e47fd1f7fce22d2feac612a0d4cf9f082b8419f47725908379b2fcfdc719", size = 64648, upload-time = "2026-10-10T14:32:38.543Z" },
+]
+
+[[package]]
+name = "importscan"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/dd/69/483d465d9b02c7d49015b4fe20fa5f5e7f36fd1ba935aa396e689aa5982a/importscan-1.0.0.tar.gz", hash = "sha256:eb346742fd225bce326f2d1c0dc97d7ed0a9904175c8958b32f7ef48dd774252", size = 24455, upload-time = "2026-10-10T14:02:20.265Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/11/0a/738f1757f9f5161f80e8cede8ea0fc604f59dd28754d38df1aa9b2c5336a/importscan-1.0.0-py3-none-any.whl", hash = "sha256:d1261751fb6afecae32d7ed2bb6a47cad31928230b0efef9e0a3f72b6fdab6fa", size = 29776, upload-time = "2026-10-10T14:02:18.77Z" },
+]
+
+[[package]]
+name = "legacy-cgi"
+version = "2.6.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/9c/91c7d2c5ebbdf0a1a510bfa0ddeaa2fbb5b78677df5ac0a0aa51cf7125b0/legacy_cgi-2.6.4.tar.gz", hash = "sha256:abb9dfc7835772f7c9317977c63253fd22a7484b5c9bbcdca60a29dcce97c577", size = 24603, upload-time = "2025-10-27T05:20:05.395Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8c/7e/e7394eeb49a41cc514b3eb49020223666cbf40d86f5721c2f07871e6d84a/legacy_cgi-2.6.4-py3-none-any.whl", hash = "sha256:7e235ce58bf1e25d1fc9b2d299015e4e2cd37305eccafec1e6bac3fc04b878cd", size = 20035, upload-time = "2025-10-27T05:20:04.289Z" },
+]
+
+[[package]]
+name = "morepath"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dectate" },
+    { name = "importscan" },
+    { name = "reg" },
+    { name = "webob" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ea/31/90f645a3cc81e9ac3b0bdbd13b0d37e9c387044a5b17a7c2982fc9a2cc23/morepath-1.0.0.tar.gz", hash = "sha256:c2b8be0a5f2433eabc8892294bca97a5fcb24cda2693907edad92301e6a1c0fd", size = 251203, upload-time = "2026-10-10T15:24:23.252Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e0/d3/f439847ae27b04dfd0624b397097d0e8be0d840342c8d4d512551dc75d2d/morepath-1.0.0-py3-none-any.whl", hash = "sha256:2bec25692e7ac359d379a503c16e1144322dd1d603648bcc59541a47fbb5cad2", size = 269664, upload-time = "2026-10-10T15:24:21.559Z" },
+]
+
+[[package]]
+name = "morepath-api-memory"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "morepath" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "webtest" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "morepath", specifier = ">=1.0" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "webtest", specifier = ">=3.0" }]
+
+[[package]]
+name = "reg"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/bd/8a/0902344e077467504812ccef78f538cf93de3bafb0e655aea3895805b605/reg-1.0.0.tar.gz", hash = "sha256:1eccf0348ae7e262aadb7645efa6d563d1e72f0483ca8b91b426cdc135575af3", size = 65463, upload-time = "2026-10-10T14:37:58.985Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/18/fc/d690383c3e6103d04e0dd9d0ec5774be1f8a3ea729d3854a95611f61d627/reg-1.0.0-py3-none-any.whl", hash = "sha256:1adcbc2a13da6696d604ff163c9b88c43f3d5216c0ca6b340719de7c45afed8a", size = 65627, upload-time = "2026-10-10T14:37:57.525Z" },
+]
+
+[[package]]
+name = "soupsieve"
+version = "3.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/0e/b9/014459776d0be4dd5f0c196fd2c8dc523a4b817a561667fae4f330b04b48/soupsieve-3.0.1.tar.gz", hash = "sha256:713d5c69f90ef84deffec0b9c6244796575e3c9fc9081cefb96091ce1200a308", size = 115438, upload-time = "2026-10-10T17:10:25.848Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3a/cd/8092ac4e9009b4a480ba212f5cdfd26dabfc97990b176bbc70c7662d6f05/soupsieve-3.0.1-py3-none-any.whl", hash = "sha256:dd1d6bd1ba7cd39866edd704321c11b4df5e7ae98620174a9071a9af3a9c05cd", size = 41679, upload-time = "2026-10-10T17:10:24.546Z" },
+]
+
+[[package]]
+name = "typing-extensions"
+version = "4.16.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz", hash = "sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5", size = 113555, upload-time = "2026-07-02T08:40:05.92Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl", hash = "sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8", size = 45571, upload-time = "2026-07-02T08:40:04.659Z" },
+]
+
+[[package]]
+name = "waitress"
+version = "3.0.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/bf/cb/04ddb054f45faa306a230769e868c28b8065ea196891f09004ebace5b184/waitress-3.0.2.tar.gz", hash = "sha256:682aaaf2af0c44ada4abfb70ded36393f0e307f4ab9456a215ce0020baefc31f", size = 179901, upload-time = "2024-11-16T20:02:35.195Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8d/57/a27182528c90ef38d82b636a11f606b0cbb0e17588ed205435f8affe3368/waitress-3.0.2-py3-none-any.whl", hash = "sha256:c56d67fd6e87c2ee598b76abdd4e96cfad1f24cacdea5078d382b1f9d7b5ed2e", size = 56232, upload-time = "2024-11-16T20:02:33.858Z" },
+]
+
+[[package]]
+name = "webob"
+version = "1.8.11"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "legacy-cgi", marker = "python_full_version >= '3.13'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e6/92/9329872e36be90e25ba616ac6e9ee8c1be4326a1ea3fdffcdabd0eb48efb/webob-1.8.11.tar.gz", hash = "sha256:aa8c27231070b135c025e567a9cd7eda03f4df71352ffaac740cb6a75f0f81a5", size = 286047, upload-time = "2026-08-02T06:26:26.063Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c1/71/370a65bc7726a1cbf478445c898c7affe907aa42e2e9e5bb38319db74115/webob-1.8.11-py2.py3-none-any.whl", hash = "sha256:4addd1d38d6a7fbe0eda22d45f25a40d74c8b290f3a99c0ac3d4023cf21f2da2", size = 118319, upload-time = "2026-08-02T06:26:24.765Z" },
+]
+
+[[package]]
+name = "webtest"
+version = "3.0.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "beautifulsoup4" },
+    { name = "waitress" },
+    { name = "webob" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/20/85/73877efb10ba4ef02364d5671724b1326d482dc928eace5fe114215443b7/webtest-3.0.7.tar.gz", hash = "sha256:7aeab50f970d46c068e7a36dd162cb242591edf72a1d04efd21374772b931741", size = 80260, upload-time = "2025-10-06T20:38:59.293Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/73/74/cb337bb1758254589b6fdc0aeeb91fa987ac1e6877a79b75edbd214fc0a9/webtest-3.0.7-py3-none-any.whl", hash = "sha256:2f51a0844f3a8beaef89bc23d225fe05ad816f7e429ffcc655a13013a799ac6c", size = 32393, upload-time = "2025-10-06T20:38:57.728Z" },
+]
