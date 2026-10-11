@@ -9,6 +9,7 @@ from jinja2 import Environment
 
 
 def environment(**options) -> Environment:
-    env = Environment(**options)
+    options.setdefault("autoescape", True)
+    env = Environment(**options)  # noqa: S701 — Django supplies autoescape; default secured above
     env.globals.update({"url": reverse})
     return env

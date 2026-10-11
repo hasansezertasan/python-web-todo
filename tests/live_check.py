@@ -120,7 +120,8 @@ def _wait_ready(base: str, timeout: float = 30.0) -> None:
                     return
         except Exception:
             time.sleep(0.5)
-    raise RuntimeError(f"server at {base} never became ready")
+    message = f"server at {base} never became ready"
+    raise RuntimeError(message)
 
 
 def check_example(example: str) -> int:

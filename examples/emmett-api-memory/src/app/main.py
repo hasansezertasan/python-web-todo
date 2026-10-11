@@ -1,6 +1,7 @@
 """Todo JSON API with Emmett and in-memory storage."""
 
 import os
+from pathlib import Path
 
 from emmett import App, request, response
 from emmett.tools import service
@@ -93,7 +94,7 @@ def main() -> None:
     # (`uv run --project examples/emmett-api-memory python -m app.main` installs
     # the `app` package, but the installed target needs no cwd assumption;
     # resolve src/ from __file__ so the default never depends on cwd).
-    src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    src_dir = str(Path(__file__).resolve().parent.parent)
     if src_dir not in sys.path:
         sys.path.insert(0, src_dir)
     server = Granian("app.main:app", interface="asgi", address="0.0.0.0", port=port)

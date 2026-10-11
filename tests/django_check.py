@@ -22,9 +22,8 @@ sys.path.insert(0, str(ROOT / "examples" / EXAMPLE / "src"))
 sys.path.insert(0, str(ROOT / "tests" / "contracts"))
 
 if EXAMPLE == "django-api-sqlite-drf":
-    tmp = tempfile.NamedTemporaryFile(suffix=".sqlite3", delete=False)
-    tmp.close()
-    DB_PATH = tmp.name
+    with tempfile.NamedTemporaryFile(suffix=".sqlite3", delete=False) as tmp:
+        DB_PATH = tmp.name
     from app.main import create_app
 
     create_app(db_path=DB_PATH)
@@ -44,7 +43,7 @@ else:
 from django.test import Client  # noqa: E402
 
 if KIND == "api":
-    from checks_api import (  # noqa: E402
+    from checks_api import (
         check_crud_flow,
         check_list_starts_empty,
         check_unknown_id,
@@ -58,7 +57,7 @@ if KIND == "api":
         check_unknown_id,
     ]
 else:
-    from checks_ssr import (  # noqa: E402
+    from checks_ssr import (
         check_add_flow,
         check_delete_flow,
         check_empty_title_rejected,
@@ -111,10 +110,10 @@ class DjangoClient:
             )
         return _Response(getattr(self._raw, method)(path, **kwargs))
 
-    def post(self, path, json=None, **kwargs):  # noqa: A002
+    def post(self, path, json=None, **kwargs):
         return self._write("post", path, json_body=json, **kwargs)
 
-    def patch(self, path, json=None, **kwargs):  # noqa: A002
+    def patch(self, path, json=None, **kwargs):
         return self._write("patch", path, json_body=json, **kwargs)
 
     def delete(self, path, **kwargs):
@@ -122,13 +121,13 @@ class DjangoClient:
 
 
 if EXAMPLE in ("django-ssr-memory-native", "django-ssr-memory-jinja"):
-    from todos.store import reset_store  # noqa: E402
+    from todos.store import reset_store
 
     def reset():
         reset_store()
 
 elif EXAMPLE == "django-api-memory-drf":
-    from app.repository import reset_store  # noqa: E402
+    from app.repository import reset_store
 
     def reset():
         reset_store()
@@ -136,8 +135,8 @@ elif EXAMPLE == "django-api-memory-drf":
 else:
 
     def reset():
-        from app.models import Todo  # noqa: E402
-        from django.db import connection  # noqa: E402
+        from app.models import Todo
+        from django.db import connection
 
         Todo.objects.all().delete()
         with connection.cursor() as cursor:

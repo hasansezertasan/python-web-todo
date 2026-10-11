@@ -98,7 +98,6 @@ async def delete_todo(db_session: AsyncSession, todo_id: int) -> None:
     repo = todo_repository(db_session)
     await repo.get(todo_id)
     await repo.delete(todo_id)
-    return None
 
 
 def create_app(db_url: str | None = None) -> Litestar:

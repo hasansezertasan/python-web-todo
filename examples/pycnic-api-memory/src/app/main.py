@@ -1,6 +1,7 @@
 """Todo JSON API with Pycnic and in-memory storage."""
 
 import os
+from typing import ClassVar
 
 from pycnic.core import WSGI, Handler
 
@@ -83,7 +84,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> type[WSGI]:
     repo = repo or InMemoryTodoRepository()
 
     class TodoApp(WSGI):
-        routes = [
+        routes: ClassVar[list] = [
             ("/todos", TodoCollectionHandler(repo)),
             (r"/todos/([0-9]+)", TodoItemHandler(repo)),
         ]

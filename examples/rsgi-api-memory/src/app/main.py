@@ -14,8 +14,11 @@ from __future__ import annotations
 import json
 import os
 import re
-from collections.abc import Awaitable, Callable
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Awaitable, Callable
 
 from .repository import InMemoryTodoRepository
 
@@ -66,7 +69,9 @@ async def _read_json(protocol: Any) -> tuple[Any, str | None]:
         return None, "Invalid JSON body"
 
 
-async def app(scope: Any, protocol: Any) -> None:
+async def app(  # noqa: PLR0911, PLR0912, PLR0915 — manual ASGI dispatch is branchy by nature
+    scope: Any, protocol: Any
+) -> None:
     if getattr(scope, "proto", "http") != "http":
         _error(protocol, 500, "Unsupported protocol")
         return
@@ -164,11 +169,8 @@ def create_app(
     so tests/harness reset via ``reset_store()`` (or pass a repository whose
     contents replace the current store).
     """
-    global repo
-    if repository is not None:
-        repo = repository
-    else:
-        repo = InMemoryTodoRepository()
+    global repo  # noqa: PLW0603 — factory swaps the module store by design
+    repo = repository if repository is not None else InMemoryTodoRepository()
     return app
 
 
@@ -182,7 +184,7 @@ def main() -> None:
     # Allow running both from the example dir (src layout on sys.path via
     # `uv run --project`) and from the repo root. Resolve the src dir from
     # __file__ so the default never depends on cwd.
-    src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    src_dir = str(Path(__file__).resolve().parent.parent)
     if src_dir not in sys.path:
         sys.path.insert(0, src_dir)
     server = Granian(target, interface="rsgi", address="0.0.0.0", port=port)

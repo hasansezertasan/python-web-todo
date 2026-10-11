@@ -89,7 +89,9 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Application:
         return json(TodoRead(id=todo.id, title=todo.title, done=todo.done))
 
     @app.router.patch("/todos/{todo_id}")
-    async def update_todo(todo_id: str, request: Request) -> Response:
+    async def update_todo(  # noqa: PLR0911 — one branch per field/error case
+        todo_id: str, request: Request
+    ) -> Response:
         """Update a todo's title and/or done flag."""
         parsed = _parse_id(todo_id)
         if parsed is None:

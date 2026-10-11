@@ -74,18 +74,19 @@ class TodoDetailHandler(BaseHandler):
         if data is None:
             return
         title = data.get("title", None)
-        if "title" in data:
-            if not isinstance(title, str) or not title.strip():
-                self.set_status(422)
-                self.write({"detail": "Title must be a non-empty string"})
-                return
+        if "title" in data and (not isinstance(title, str) or not title.strip()):
+            self.set_status(422)
+            self.write({"detail": "Title must be a non-empty string"})
+            return
         done = data.get("done", None)
         if "done" in data and not isinstance(done, bool):
             self.set_status(422)
             self.write({"detail": "Done must be a boolean"})
             return
         updated = self.store.update(int(todo_id), title=title, done=done)
-        assert updated is not None
+        if updated is None:
+            self.write_not_found()
+            return
         self.write(todo_to_dict(updated))
 
     def delete(self, todo_id: str) -> None:

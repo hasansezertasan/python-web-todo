@@ -3,10 +3,11 @@
 
 import os
 import sys
+from pathlib import Path
 
 
 def main() -> None:
-    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings")
     try:
         from django.core.management import execute_from_command_line

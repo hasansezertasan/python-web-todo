@@ -18,7 +18,7 @@ store: InMemoryTodoRepository = InMemoryTodoRepository()
 
 def use_store(repo: InMemoryTodoRepository) -> None:
     """Bind the handlers to ``repo`` (used by ``create_app`` for fresh state)."""
-    global store
+    global store  # noqa: PLW0603 — operationId handlers share module state by design
     store = repo
 
 

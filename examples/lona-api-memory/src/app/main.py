@@ -65,7 +65,9 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> LonaApp:
 
     @app.route("/todos/<todo_id>", http_pass_through=True)
     class TodoItemView(View):
-        async def handle_request(self, request):
+        async def handle_request(  # noqa: PLR0911 — manual dispatch is branchy
+            self, request
+        ):
             # Lona's router matches the path but the raw aiohttp request
             # carries no route params, so the id is parsed off the path.
             todo_id = _parse_id(request.path.rsplit("/", 1)[-1])

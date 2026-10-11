@@ -5,9 +5,9 @@ pipeline. ``DATABASES`` uses the dummy backend so that any accidental ORM
 touch fails loudly instead of silently creating a database.
 """
 
-import os
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-ssr-memory-native-example-key"
 DEBUG = True
@@ -23,7 +23,7 @@ MIDDLEWARE = ["django.middleware.common.CommonMiddleware"]
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "todos", "templates")],
+        "DIRS": [str(BASE_DIR / "todos" / "templates")],
         "APP_DIRS": True,
         "OPTIONS": {},
     }

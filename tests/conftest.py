@@ -32,7 +32,7 @@ def load_app_factory(example: str):
         if example == "connexion-api-memory":
             src = str(EXAMPLES_DIR / example / "src")
             sys.path.insert(0, src)
-            from app.main import create_app  # noqa: E402
+            from app.main import create_app
 
             _FACTORIES[example] = create_app
         else:

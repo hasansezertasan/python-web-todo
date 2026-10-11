@@ -8,9 +8,9 @@ Templates use Django's built-in Jinja2 backend (see ``todos.jinja2`` for the
 environment exposing URL reversing to templates).
 """
 
-import os
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-ssr-memory-jinja-example-key"
 DEBUG = True
@@ -26,7 +26,7 @@ MIDDLEWARE = ["django.middleware.common.CommonMiddleware"]
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.jinja2.Jinja2",
-        "DIRS": [os.path.join(BASE_DIR, "todos", "templates")],
+        "DIRS": [str(BASE_DIR / "todos" / "templates")],
         "APP_DIRS": True,
         "OPTIONS": {"environment": "todos.jinja2.environment"},
     }

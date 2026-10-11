@@ -38,14 +38,14 @@ def create_app(repo: InMemoryTodoRepository | None = None):
         try:
             repo.toggle(int(request.matchdict["todo_id"]))
         except KeyError:
-            raise HTTPNotFound()
+            raise HTTPNotFound from None
         return HTTPFound(location="/")
 
     def delete_todo(request):
         try:
             repo.delete(int(request.matchdict["todo_id"]))
         except KeyError:
-            raise HTTPNotFound()
+            raise HTTPNotFound from None
         return HTTPFound(location="/")
 
     config = Configurator()

@@ -2,6 +2,7 @@
 
 import json
 import os
+from typing import TypeGuard
 
 from baize.asgi import JSONResponse, Request, Response, Router, request_response
 
@@ -13,7 +14,7 @@ def _to_json(todo: Todo) -> dict:
     return {"id": todo.id, "title": todo.title, "done": todo.done}
 
 
-def _valid_title(value: object) -> bool:
+def _valid_title(value: object) -> TypeGuard[str]:
     return isinstance(value, str) and len(value) > 0
 
 
@@ -48,12 +49,13 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Router:
             title = (await _read_body(request)).get("title")
             if not _valid_title(title):
                 return _invalid_title()
-            assert isinstance(title, str)
             return JSONResponse(_to_json(store.create(title=title)), status_code=201)
         return _method_not_allowed()
 
     @request_response
-    async def todo_detail(request: Request) -> Response:
+    async def todo_detail(  # noqa: PLR0911 — one branch per field/error case
+        request: Request,
+    ) -> Response:
         todo_id = request.path_params["todo_id"]
         if request.method == "GET":
             try:

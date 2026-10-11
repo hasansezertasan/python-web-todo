@@ -64,7 +64,6 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Litestar:
             repo.delete(todo_id)
         except KeyError:
             raise NotFoundException(detail="Todo not found") from None
-        return None
 
     return Litestar(
         route_handlers=[list_todos, create_todo, get_todo, update_todo, delete_todo],

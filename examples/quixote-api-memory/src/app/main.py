@@ -8,6 +8,7 @@ through ``quixote.get_request()``/``quixote.get_response()``, and the stock
 
 import json
 import os
+from typing import ClassVar
 from wsgiref.simple_server import make_server
 
 import quixote
@@ -68,7 +69,7 @@ class TodosDirectory(Directory):
     has no per-method routing of its own.
     """
 
-    _q_exports: list = []
+    _q_exports: ClassVar[list] = []
 
     def __init__(self, repo: InMemoryTodoRepository) -> None:
         self._repo = repo
@@ -99,7 +100,9 @@ class TodosDirectory(Directory):
             return _json_response(_to_json(self._repo.create(title=title)), status=201)
         return _json_response({"error": "Method not allowed"}, status=405)
 
-    def _item(self, raw_id: str) -> str:
+    def _item(  # noqa: PLR0911 — method dispatch branches per verb
+        self, raw_id: str
+    ) -> str:
         try:
             todo_id = int(raw_id)
         except (TypeError, ValueError):
@@ -138,7 +141,7 @@ class TodosDirectory(Directory):
 
 
 class RootDirectory(Directory):
-    _q_exports = ["todos"]
+    _q_exports: ClassVar[list] = ["todos"]
 
     def __init__(self, repo: InMemoryTodoRepository) -> None:
         self.todos = TodosDirectory(repo)

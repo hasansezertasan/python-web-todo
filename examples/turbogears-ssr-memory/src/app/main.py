@@ -46,7 +46,7 @@ class TodosController(TGController):
             abort(404)
         return TodoItemController(self._repo, parsed_id), remainder
 
-    @expose("app.templates.index")
+    @expose("app.templates.index")  # noqa: RET503 — paths end in redirect(), which raises
     def index(self):
         if request.method == "POST":
             title = (request.POST.get("title") or "").strip()

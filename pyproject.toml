@@ -34,13 +34,36 @@ testpaths = ["tests"]
 target-version = "py311"
 
 [tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # Pyflakes
-    "I",   # isort
-    "UP",  # pyupgrade
+select = ["ALL"]
+ignore = [
+    "D",        # docstring-everything: low value across 35 agent-written examples
+    "ANN",      # annotations-everything: same; typed where it matters (pydantic)
+    "CPY001",   # no license-header practice in this repo
+    "COM812",   # conflicts with skip-magic-trailing-comma = true
+    "PLC0415",  # lazy imports are the established pattern (servers in main(), path setup)
+    "FBT",      # boolean args are fine in this codebase's idiom
+    "S104",     # 0.0.0.0 bind is deliberate for dev servers
+    "ARG",      # framework-imposed signatures often force unused params
+    "T201",     # runner scripts and dev servers print by design
+    "BLE001",   # best-effort adapters intentionally swallow parse errors
+    "PLR2004",  # status-code literals in tests/handlers are idiomatic
+    "INP001",   # src-layout namespace packages are deliberate
+    "C901",     # complexity gates on demo handlers: cumbersome
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]          # asserts are the test idiom
+"**/settings.py" = ["S105"]    # dev-only SECRET_KEYs, documented as such
+"examples/cherrypy-api-memory/src/app/main.py" = ["N802"]  # MethodDispatcher requires VERB names
+"examples/circuits-api-memory/src/app/controllers.py" = ["N802"]  # same
+"examples/twisted-api-memory/src/app/main.py" = ["N802", "N815"]  # render_* verbs, isLeaf attr
+"**/manage.py" = ["TRY003", "EM101"]  # startup guard messages
+"**/serializers.py" = ["TRY003", "EM101", "RUF012"]  # DRF declarative idiom
+"examples/django-api-sqlite-drf/src/app/models.py" = ["RUF012"]  # Django field idiom
+"examples/litestar-api-sqlite-advanced-alchemy/src/app/main.py" = ["TC002"]  # litestar resolves hints at runtime
+"tests/live_check.py" = ["S310", "S603"]  # audited: localhost URLs, fixed argv
+"tests/venv_check.py" = ["S603", "PLW1510"]  # returncode checked manually
+"tests/django_check.py" = ["SLF001"]  # Todo._meta is the documented Django API
 
 [tool.ruff.format]
 docstring-code-format = true

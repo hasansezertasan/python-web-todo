@@ -49,7 +49,9 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> web.Application:
             return _not_found()
         return web.json_response(todo_to_dict(todo))
 
-    async def update_todo(request: web.Request) -> web.Response:
+    async def update_todo(  # noqa: PLR0911 — one branch per field/error case
+        request: web.Request,
+    ) -> web.Response:
         todo_id = _parse_id(request.match_info["todo_id"])
         if todo_id is None:
             return _not_found()

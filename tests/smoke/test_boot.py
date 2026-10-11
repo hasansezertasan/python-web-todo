@@ -13,6 +13,6 @@ SMOKE_TARGETS = [
 ]
 
 
-@pytest.mark.parametrize("example,path,expected", SMOKE_TARGETS)
+@pytest.mark.parametrize(("example", "path", "expected"), SMOKE_TARGETS)
 def test_example_serves(example, path, expected):
     assert load_client(example).get(path).status_code == expected

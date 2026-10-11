@@ -2,6 +2,7 @@
 
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Response, status
 from sqlalchemy import create_engine
@@ -33,15 +34,17 @@ def create_app(db_url: str | None = None) -> FastAPI:
     app = FastAPI(title="Todo API (FastAPI, SQLite + SQLAlchemy)")
 
     @app.get("/todos", response_model=list[TodoRead])
-    def list_todos(db: Session = Depends(get_db)) -> list[Todo]:
+    def list_todos(db: Annotated[Session, Depends(get_db)]) -> list[Todo]:
         return SqlAlchemyTodoRepository(db).list()
 
     @app.post("/todos", response_model=TodoRead, status_code=status.HTTP_201_CREATED)
-    def create_todo(payload: TodoCreate, db: Session = Depends(get_db)) -> Todo:
+    def create_todo(
+        payload: TodoCreate, db: Annotated[Session, Depends(get_db)]
+    ) -> Todo:
         return SqlAlchemyTodoRepository(db).create(title=payload.title)
 
     @app.get("/todos/{todo_id}", response_model=TodoRead)
-    def get_todo(todo_id: int, db: Session = Depends(get_db)) -> Todo:
+    def get_todo(todo_id: int, db: Annotated[Session, Depends(get_db)]) -> Todo:
         try:
             return SqlAlchemyTodoRepository(db).get(todo_id)
         except KeyError:
@@ -49,7 +52,7 @@ def create_app(db_url: str | None = None) -> FastAPI:
 
     @app.patch("/todos/{todo_id}", response_model=TodoRead)
     def update_todo(
-        todo_id: int, payload: TodoUpdate, db: Session = Depends(get_db)
+        todo_id: int, payload: TodoUpdate, db: Annotated[Session, Depends(get_db)]
     ) -> Todo:
         try:
             return SqlAlchemyTodoRepository(db).update(
@@ -59,7 +62,7 @@ def create_app(db_url: str | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Todo not found") from None
 
     @app.delete("/todos/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
-    def delete_todo(todo_id: int, db: Session = Depends(get_db)) -> Response:
+    def delete_todo(todo_id: int, db: Annotated[Session, Depends(get_db)]) -> Response:
         try:
             SqlAlchemyTodoRepository(db).delete(todo_id)
         except KeyError:
