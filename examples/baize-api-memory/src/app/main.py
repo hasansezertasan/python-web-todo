@@ -34,6 +34,10 @@ def _invalid_title() -> JSONResponse:
     return JSONResponse({"detail": "title must be a non-empty string"}, status_code=422)
 
 
+def _invalid_done() -> JSONResponse:
+    return JSONResponse({"detail": "done must be a boolean"}, status_code=422)
+
+
 def _method_not_allowed() -> JSONResponse:
     return JSONResponse({"detail": "Method not allowed"}, status_code=405)
 
@@ -68,6 +72,8 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Router:
             done = body.get("done")
             if title is not None and not _valid_title(title):
                 return _invalid_title()
+            if done is not None and not isinstance(done, bool):
+                return _invalid_done()
             try:
                 return JSONResponse(
                     _to_json(store.update(todo_id, title=title, done=done))

@@ -82,6 +82,8 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> morepath.App:
         done = body.get("done")
         if title is not None and not _valid_title(title):
             return _error(422, "title must be a non-empty string")
+        if done is not None and not isinstance(done, bool):
+            return _error(422, "done must be a boolean")
         return _to_json(repo.update(self.id, title=title, done=done))
 
     @TodoApp.view(model=Todo, request_method="DELETE")

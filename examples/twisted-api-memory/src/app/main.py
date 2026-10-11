@@ -75,6 +75,10 @@ class TodoItemResource(Resource):
             return _json_response(
                 request, {"error": "title must be a non-empty string"}, 422
             )
+        if done is not None and not isinstance(done, bool):
+            return _json_response(
+                request, {"error": "done must be a boolean"}, 422
+            )
         try:
             todo = self._repo.update(self._todo_id, title=title, done=done)
         except KeyError:

@@ -39,6 +39,9 @@ class TodosController(Controller):
     def _invalid_title(self) -> str:
         return self._json({"detail": "Title must not be empty"}, 422)
 
+    def _invalid_done(self) -> str:
+        return self._json({"detail": "Done must be a boolean"}, 422)
+
     def _read_payload(self) -> Any:
         try:
             raw = self.request.body.getvalue().decode("utf-8")
@@ -90,8 +93,8 @@ class TodosController(Controller):
         done = payload.get("done")
         if title is not None and (not isinstance(title, str) or len(title) < 1):
             return self._invalid_title()
-        if done is not None:
-            done = bool(done)
+        if done is not None and not isinstance(done, bool):
+            return self._invalid_done()
         return self._json(_to_dict(self._repo.update(parsed, title=title, done=done)))
 
     def DELETE(self, todo_id: str | None = None, **kwargs: Any) -> str:

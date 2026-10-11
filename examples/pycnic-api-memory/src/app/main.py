@@ -55,6 +55,9 @@ class TodoItemHandler(Handler):
         if "title" in body and not _valid_title(body.get("title")):
             self.response.status_code = 422
             return {"error": "title must be a non-empty string"}
+        if "done" in body and not isinstance(body.get("done"), bool):
+            self.response.status_code = 422
+            return {"error": "done must be a boolean"}
         try:
             todo = self.repo.update(
                 int(todo_id), title=body.get("title"), done=body.get("done")

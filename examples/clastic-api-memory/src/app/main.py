@@ -80,6 +80,8 @@ def update_todo(
     done = body.get("done")
     if title is not None and not _valid_title(title):
         return _json_response({"error": "title must be a non-empty string"}, 422)
+    if done is not None and not isinstance(done, bool):
+        return _json_response({"error": "done must be a boolean"}, 422)
     try:
         return _to_json(store.update(parsed_id, title=title, done=done))
     except KeyError:

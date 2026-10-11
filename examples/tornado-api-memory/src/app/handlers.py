@@ -37,6 +37,13 @@ class BaseHandler(tornado.web.RequestHandler):
         self.set_status(404)
         self.write({"detail": "Todo not found"})
 
+    def parse_id(self, raw: str) -> int | None:
+        """Parse a path id, returning None (caller answers 404) when not an int."""
+        try:
+            return int(raw)
+        except (TypeError, ValueError):
+            return None
+
 
 class TodoListHandler(BaseHandler):
     def get(self) -> None:
@@ -59,14 +66,22 @@ class TodoListHandler(BaseHandler):
 
 class TodoDetailHandler(BaseHandler):
     def get(self, todo_id: str) -> None:
-        todo = self.store.get(int(todo_id))
+        parsed = self.parse_id(todo_id)
+        if parsed is None:
+            self.write_not_found()
+            return
+        todo = self.store.get(parsed)
         if todo is None:
             self.write_not_found()
             return
         self.write(todo_to_dict(todo))
 
     def patch(self, todo_id: str) -> None:
-        todo = self.store.get(int(todo_id))
+        parsed = self.parse_id(todo_id)
+        if parsed is None:
+            self.write_not_found()
+            return
+        todo = self.store.get(parsed)
         if todo is None:
             self.write_not_found()
             return
@@ -83,14 +98,18 @@ class TodoDetailHandler(BaseHandler):
             self.set_status(422)
             self.write({"detail": "Done must be a boolean"})
             return
-        updated = self.store.update(int(todo_id), title=title, done=done)
+        updated = self.store.update(parsed, title=title, done=done)
         if updated is None:
             self.write_not_found()
             return
         self.write(todo_to_dict(updated))
 
     def delete(self, todo_id: str) -> None:
-        if not self.store.delete(int(todo_id)):
+        parsed = self.parse_id(todo_id)
+        if parsed is None:
+            self.write_not_found()
+            return
+        if not self.store.delete(parsed):
             self.write_not_found()
             return
         self.set_status(204)

@@ -71,6 +71,9 @@ class TodoItemResource:
         if title is not None and not _valid_title(title):
             _error(resp, falcon.HTTP_422, "title must be a non-empty string")
             return
+        if done is not None and not isinstance(done, bool):
+            _error(resp, falcon.HTTP_422, "done must be a boolean")
+            return
         try:
             todo = self._repo.update(todo_id, title=title, done=done)
         except KeyError:

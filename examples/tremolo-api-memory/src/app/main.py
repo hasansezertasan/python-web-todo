@@ -51,6 +51,15 @@ def _invalid_title(response: Any) -> str:
     )
 
 
+def _invalid_done(response: Any) -> str:
+    return _json(
+        response,
+        {"error": "done must be a boolean"},
+        422,
+        "Unprocessable Entity",
+    )
+
+
 def _parse_id(todo_id: bytes | str) -> int | None:
     if isinstance(todo_id, (bytes, bytearray)):
         todo_id = bytes(todo_id).decode("latin-1")
@@ -111,6 +120,8 @@ class TodoDetailView:
         done = body.get("done")
         if "title" in body and not _valid_title(title):
             return _invalid_title(response)
+        if done is not None and not isinstance(done, bool):
+            return _invalid_done(response)
         try:
             todo = self.repo.update(parsed, title=title, done=done)
         except KeyError:

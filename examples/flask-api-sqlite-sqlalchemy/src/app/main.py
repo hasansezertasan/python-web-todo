@@ -71,6 +71,8 @@ def create_app(db_url: str | None = None) -> Flask:
         done = body.get("done")
         if title is not None and not _valid_title(title):
             return jsonify({"error": "title must be a non-empty string"}), 422
+        if done is not None and not isinstance(done, bool):
+            return jsonify({"error": "done must be a boolean"}), 422
         with sessions() as session:
             todo = session.get(Todo, todo_id)
             if todo is None:

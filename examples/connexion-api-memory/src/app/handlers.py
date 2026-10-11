@@ -38,6 +38,14 @@ def _invalid_title() -> Any:
     )
 
 
+def _invalid_done() -> Any:
+    return problem(
+        status=422,
+        title="Unprocessable Entity",
+        detail="Done must be a boolean.",
+    )
+
+
 def _valid_title(value: Any) -> bool:
     return isinstance(value, str) and len(value) > 0
 
@@ -69,6 +77,8 @@ def update_todo(todo_id: int, body: Any) -> Any:
     else:
         title = None
     done = data.get("done")
+    if done is not None and not isinstance(done, bool):
+        return _invalid_done()
     try:
         return _item(store.update(todo_id, title=title, done=done))
     except KeyError:

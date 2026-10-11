@@ -44,6 +44,8 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Quart:
         done = body.get("done")
         if title is not None and not _valid_title(title):
             return jsonify({"error": "title must be a non-empty string"}), 422
+        if done is not None and not isinstance(done, bool):
+            return jsonify({"error": "done must be a boolean"}), 422
         try:
             return jsonify(_to_json(await repo.update(todo_id, title=title, done=done)))
         except KeyError:

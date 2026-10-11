@@ -61,6 +61,8 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Bottle:
         done = body.get("done")
         if "title" in body and not _valid_title(title):
             return _json_body({"error": "title must be a non-empty string"}, 422)
+        if done is not None and not isinstance(done, bool):
+            return _json_body({"error": "done must be a boolean"}, 422)
         try:
             todo = repo.update(todo_id, title=title, done=done)
         except KeyError:

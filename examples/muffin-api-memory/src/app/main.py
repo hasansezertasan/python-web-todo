@@ -63,6 +63,10 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Application:
             return ResponseJSON(
                 {"error": "title must be a non-empty string"}, status_code=422
             )
+        if done is not None and not isinstance(done, bool):
+            return ResponseJSON(
+                {"error": "done must be a boolean"}, status_code=422
+            )
         try:
             return _to_json(repo.update(todo_id, title=title, done=done))
         except KeyError:

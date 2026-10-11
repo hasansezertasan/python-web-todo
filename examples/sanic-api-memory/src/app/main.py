@@ -60,6 +60,8 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Sanic:
         done = body.get("done")
         if title is not None and not _valid_title(title):
             return json({"error": "title must be a non-empty string"}, status=422)
+        if done is not None and not isinstance(done, bool):
+            return json({"error": "done must be a boolean"}, status=422)
         try:
             return json(_to_json(repo.update(todo_id, title=title, done=done)))
         except KeyError:
