@@ -1,8 +1,7 @@
 """advanced-alchemy repository for todos."""
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from .models import Todo
 

@@ -30,9 +30,7 @@ def _not_found() -> JSONResponse:
 
 
 def _invalid_title() -> JSONResponse:
-    return JSONResponse(
-        {"detail": "title must be a non-empty string"}, status_code=422
-    )
+    return JSONResponse({"detail": "title must be a non-empty string"}, status_code=422)
 
 
 def _method_not_allowed() -> JSONResponse:

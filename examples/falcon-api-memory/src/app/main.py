@@ -54,9 +54,7 @@ class TodoItemResource:
     def __init__(self, repo: InMemoryTodoRepository) -> None:
         self._repo = repo
 
-    def on_get(
-        self, _req: falcon.Request, resp: falcon.Response, todo_id: int
-    ) -> None:
+    def on_get(self, _req: falcon.Request, resp: falcon.Response, todo_id: int) -> None:
         try:
             todo = self._repo.get(todo_id)
         except KeyError:

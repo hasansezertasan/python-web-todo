@@ -1,7 +1,7 @@
 """Process-local in-memory store. Starts empty; data loss on restart is fine."""
 
 import threading
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass

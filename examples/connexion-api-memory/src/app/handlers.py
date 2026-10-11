@@ -27,9 +27,7 @@ def _item(todo: Any) -> dict[str, Any]:
 
 
 def _not_found(todo_id: int) -> Any:
-    return problem(
-        status=404, title="Not Found", detail=f"Todo {todo_id} not found."
-    )
+    return problem(status=404, title="Not Found", detail=f"Todo {todo_id} not found.")
 
 
 def _invalid_title() -> Any:

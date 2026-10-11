@@ -47,7 +47,10 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
     repo = repo or InMemoryTodoRepository()
     app = App()
 
-    app.get("/todos", lambda res, req: _send_json(res, 200, [_to_json(t) for t in repo.list()]))
+    app.get(
+        "/todos",
+        lambda res, req: _send_json(res, 200, [_to_json(t) for t in repo.list()]),
+    )
 
     async def create_todo(res, req):
         title = (await _body(res, req)).get("title")

@@ -30,9 +30,7 @@ def _not_found() -> JSONResponse:
 
 
 def _invalid_title() -> JSONResponse:
-    return JSONResponse(
-        {"detail": "title must be a non-empty string"}, status_code=422
-    )
+    return JSONResponse({"detail": "title must be a non-empty string"}, status_code=422)
 
 
 def create_app(repo: InMemoryTodoRepository | None = None) -> Starlette:
@@ -62,7 +60,9 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Starlette:
             return _invalid_title()
         try:
             return JSONResponse(
-                _to_json(repo.update(request.path_params["todo_id"], title=title, done=done))
+                _to_json(
+                    repo.update(request.path_params["todo_id"], title=title, done=done)
+                )
             )
         except KeyError:
             return _not_found()

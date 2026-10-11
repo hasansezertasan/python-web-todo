@@ -1,9 +1,8 @@
 """Request/response schemas (msgspec Structs, Litestar-native)."""
 
-from typing import Union
+from typing import Annotated
 
 from msgspec import UNSET, Meta, Struct, UnsetType
-from typing_extensions import Annotated
 
 
 class TodoCreate(Struct):
@@ -11,8 +10,8 @@ class TodoCreate(Struct):
 
 
 class TodoUpdate(Struct):
-    title: Union[Annotated[str, Meta(min_length=1)], UnsetType] = UNSET
-    done: Union[bool, UnsetType] = UNSET
+    title: Annotated[str, Meta(min_length=1)] | UnsetType = UNSET
+    done: bool | UnsetType = UNSET
 
 
 class TodoRead(Struct):

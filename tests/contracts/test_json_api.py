@@ -1,7 +1,6 @@
 """JSON API contract checks (see specs/json-api.md)."""
 
 import pytest
-
 from checks_api import (
     OPENAPI_PATHS,
     check_crud_flow,

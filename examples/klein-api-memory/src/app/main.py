@@ -56,9 +56,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Klein:
     def create_todo(request):
         title = _request_body(request).get("title")
         if not _valid_title(title):
-            return _json(
-                request, {"error": "title must be a non-empty string"}, 422
-            )
+            return _json(request, {"error": "title must be a non-empty string"}, 422)
         return _json(request, _to_json(repo.create(title=title)), 201)
 
     @app.route("/todos/<todo_id>", methods=["GET"])
@@ -81,9 +79,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Klein:
         title = body.get("title")
         done = body.get("done")
         if "title" in body and not _valid_title(title):
-            return _json(
-                request, {"error": "title must be a non-empty string"}, 422
-            )
+            return _json(request, {"error": "title must be a non-empty string"}, 422)
         try:
             todo = repo.update(parsed, title=title, done=done)
         except KeyError:

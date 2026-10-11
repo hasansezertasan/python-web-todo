@@ -11,9 +11,7 @@ def _not_found() -> web.Response:
 
 
 def _invalid_title() -> web.Response:
-    return web.json_response(
-        {"detail": "Title must be a non-empty string"}, status=422
-    )
+    return web.json_response({"detail": "Title must be a non-empty string"}, status=422)
 
 
 def _parse_id(raw: str) -> int | None:
@@ -63,14 +61,10 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> web.Application:
             return _invalid_title()
         title = payload.get("title", None)
         done = payload.get("done", None)
-        if "title" in payload and (
-            not isinstance(title, str) or not title.strip()
-        ):
+        if "title" in payload and (not isinstance(title, str) or not title.strip()):
             return _invalid_title()
         if "done" in payload and not isinstance(done, bool):
-            return web.json_response(
-                {"detail": "Done must be a boolean"}, status=422
-            )
+            return web.json_response({"detail": "Done must be a boolean"}, status=422)
         try:
             todo = repo.update(todo_id, title=title, done=done)
         except KeyError:

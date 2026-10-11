@@ -23,7 +23,9 @@ def _not_found() -> t.NoReturn:
     raise exceptions.HTTPException(status_code=404, detail="Todo not found")
 
 
-def _validation_error_to_422(scope, receive, send, exc: exceptions.ValidationError) -> http.Response:
+def _validation_error_to_422(
+    scope, receive, send, exc: exceptions.ValidationError
+) -> http.Response:
     # Flama reports schema-validation failures as 400 by default;
     # the shared JSON API contract expects 422, so remap them here.
     return http.JSONResponse({"detail": exc.detail}, status_code=422)
@@ -67,7 +69,9 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Flama:
         """Update a todo."""
         values = dict(data) if isinstance(data, dict) else data.model_dump()
         try:
-            updated = repo.update(todo_id, title=values.get("title"), done=values.get("done"))
+            updated = repo.update(
+                todo_id, title=values.get("title"), done=values.get("done")
+            )
         except KeyError:
             _not_found()
         return _to_json(updated)

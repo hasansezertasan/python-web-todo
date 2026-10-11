@@ -14,9 +14,9 @@ from __future__ import annotations
 import json
 import os
 import re
-from typing import Any, Awaitable, Callable
+from collections.abc import Awaitable, Callable
+from typing import Any
 
-from .models import Todo
 from .repository import InMemoryTodoRepository
 
 repo = InMemoryTodoRepository()
@@ -112,7 +112,9 @@ async def app(scope: Any, protocol: Any) -> None:
             if err is not None:
                 _error(protocol, 422, err)
                 return
-            if not isinstance(data, dict) or ("title" not in data and "done" not in data):
+            if not isinstance(data, dict) or (
+                "title" not in data and "done" not in data
+            ):
                 _error(protocol, 422, "Nothing to update")
                 return
             title: str | None = None

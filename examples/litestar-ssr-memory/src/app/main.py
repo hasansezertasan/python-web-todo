@@ -1,7 +1,6 @@
 """Todo server-rendered app with Litestar, Jinja templates, and in-memory storage."""
 
 from pathlib import Path
-from typing import Union
 
 from litestar import Litestar, Request, get, post
 from litestar.contrib.jinja import JinjaTemplateEngine
@@ -20,21 +19,17 @@ def _repo(request: Request) -> InMemoryTodoRepository:
     return request.app.state["repo"]
 
 
-def _list_context(
-    repo: InMemoryTodoRepository, error: str | None = None
-) -> dict:
+def _list_context(repo: InMemoryTodoRepository, error: str | None = None) -> dict:
     return {"todos": repo.list(), "error": error}
 
 
 @get("/")
 async def index(request: Request) -> Template:
-    return Template(
-        template_name="index.html", context=_list_context(_repo(request))
-    )
+    return Template(template_name="index.html", context=_list_context(_repo(request)))
 
 
 @post("/todos")
-async def add_todo(request: Request) -> Union[Redirect, Template]:
+async def add_todo(request: Request) -> Redirect | Template:
     repo = _repo(request)
     form = await request.form()
     raw_title = form.get("title")

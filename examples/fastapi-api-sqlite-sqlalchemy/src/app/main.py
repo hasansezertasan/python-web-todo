@@ -1,7 +1,7 @@
 """Todo JSON API with FastAPI and SQLite storage via SQLAlchemy."""
 
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from fastapi import Depends, FastAPI, HTTPException, Response, status
 from sqlalchemy import create_engine

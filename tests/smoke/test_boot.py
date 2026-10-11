@@ -1,7 +1,6 @@
 """Smoke checks: each example boots and serves its listing endpoint."""
 
 import pytest
-
 from conftest import load_client
 
 # (example, probe path, expected status)

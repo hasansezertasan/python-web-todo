@@ -98,9 +98,7 @@ class TodosResource(Resource):
         self._repo = repo
 
     def render_GET(self, request):
-        return _json_response(
-            request, [_to_json(todo) for todo in self._repo.list()]
-        )
+        return _json_response(request, [_to_json(todo) for todo in self._repo.list()])
 
     def render_POST(self, request):
         title = _request_body(request).get("title")

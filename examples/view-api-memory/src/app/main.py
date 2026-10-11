@@ -35,9 +35,7 @@ async def _read_body(request: Request) -> dict:
 
 
 def _not_found() -> JSONResponse:
-    return JSONResponse.from_content(
-        {"detail": "Todo not found"}, status_code=404
-    )
+    return JSONResponse.from_content({"detail": "Todo not found"}, status_code=404)
 
 
 def _invalid_title() -> JSONResponse:
@@ -66,9 +64,7 @@ def _no_content() -> Response:
         return
         yield b""  # pragma: no cover
 
-    return Response(
-        receive_data=_empty(), status_code=204, headers=HTTPHeaders()
-    )
+    return Response(receive_data=_empty(), status_code=204, headers=HTTPHeaders())
 
 
 def create_app(repo: InMemoryTodoRepository | None = None) -> App:
@@ -77,9 +73,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> App:
 
     @app.get("/todos")
     async def list_todos():
-        return JSONResponse.from_content(
-            [_to_json(todo) for todo in repo.list()]
-        )
+        return JSONResponse.from_content([_to_json(todo) for todo in repo.list()])
 
     @app.post("/todos")
     async def create_todo():

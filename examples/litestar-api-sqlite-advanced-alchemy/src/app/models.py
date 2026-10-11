@@ -1,8 +1,7 @@
 """SQLAlchemy model for the todo API (advanced-alchemy base)."""
 
-from sqlalchemy.orm import Mapped, mapped_column
-
 from advanced_alchemy.base import BigIntBase
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class Todo(BigIntBase):

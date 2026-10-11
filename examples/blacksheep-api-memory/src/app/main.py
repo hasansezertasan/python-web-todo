@@ -74,9 +74,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> Application:
         if not _valid_title(title):
             return _unprocessable("title must be a non-empty string")
         todo = repo.create(title=title)
-        return json(
-            TodoRead(id=todo.id, title=todo.title, done=todo.done), status=201
-        )
+        return json(TodoRead(id=todo.id, title=todo.title, done=todo.done), status=201)
 
     @app.router.get("/todos/{todo_id}")
     async def get_todo(todo_id: str) -> Response:

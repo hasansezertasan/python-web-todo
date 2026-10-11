@@ -63,7 +63,9 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> morepath.App:
         return [_to_json(todo) for todo in repo.list()]
 
     @TodoApp.json(model=TodoCollection, request_method="POST")
-    def _create_todo(self: TodoCollection, request: morepath.Request) -> Response | dict:
+    def _create_todo(
+        self: TodoCollection, request: morepath.Request
+    ) -> Response | dict:
         title = _request_body(request).get("title")
         if not _valid_title(title):
             return _error(422, "title must be a non-empty string")

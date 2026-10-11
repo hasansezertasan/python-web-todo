@@ -5,6 +5,11 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from advanced_alchemy.extensions.litestar import (
+    AsyncSessionConfig,
+    SQLAlchemyAsyncConfig,
+    SQLAlchemyInitPlugin,
+)
 from litestar import Litestar, Request, Response, delete, get, patch, post
 from litestar.enums import MediaType
 from litestar.exceptions import ValidationException
@@ -17,12 +22,6 @@ from litestar.status_codes import (
 )
 from msgspec import UNSET
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from advanced_alchemy.extensions.litestar import (
-    AsyncSessionConfig,
-    SQLAlchemyAsyncConfig,
-    SQLAlchemyInitPlugin,
-)
 
 from .models import Todo
 from .repository import todo_repository

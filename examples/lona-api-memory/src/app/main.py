@@ -9,7 +9,8 @@ receives the raw aiohttp request and may return ``lona.responses.JsonResponse``
 import os
 
 from aiohttp.web import Response as AiohttpResponse
-from lona import MATCH_ALL, App as LonaApp, JsonResponse, View
+from lona import MATCH_ALL, JsonResponse, View
+from lona import App as LonaApp
 
 from .models import todo_to_dict
 from .repository import InMemoryTodoRepository
@@ -20,9 +21,7 @@ def _not_found() -> JsonResponse:
 
 
 def _invalid_title() -> JsonResponse:
-    return JsonResponse(
-        data={"detail": "title must be a non-empty string"}, status=422
-    )
+    return JsonResponse(data={"detail": "title must be a non-empty string"}, status=422)
 
 
 def _method_not_allowed() -> JsonResponse:
@@ -52,9 +51,7 @@ def create_app(repo: InMemoryTodoRepository | None = None) -> LonaApp:
     class TodoCollectionView(View):
         async def handle_request(self, request):
             if request.method == "GET":
-                return JsonResponse(
-                    data=[todo_to_dict(todo) for todo in repo.list()]
-                )
+                return JsonResponse(data=[todo_to_dict(todo) for todo in repo.list()])
 
             if request.method == "POST":
                 body = await _read_json(request)

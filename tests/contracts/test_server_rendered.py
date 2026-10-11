@@ -1,7 +1,6 @@
 """Server-rendered contract checks (see specs/server-rendered.md)."""
 
 import pytest
-
 from checks_ssr import (
     check_add_flow,
     check_delete_flow,

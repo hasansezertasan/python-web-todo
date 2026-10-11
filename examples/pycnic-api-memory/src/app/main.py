@@ -2,7 +2,7 @@
 
 import os
 
-from pycnic.core import Handler, WSGI
+from pycnic.core import WSGI, Handler
 
 from .models import Todo
 from .repository import InMemoryTodoRepository

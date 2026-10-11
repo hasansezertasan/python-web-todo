@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 EXAMPLE = sys.argv[1]
 sys.path.insert(0, str(ROOT / "tests" / "contracts"))
 
+from app.main import create_app  # noqa: E402  (the example's installed package)
 from checks_api import (  # noqa: E402
     check_crud_flow,
     check_list_starts_empty,
@@ -28,10 +29,10 @@ from checks_ssr import (  # noqa: E402
     check_empty_title_rejected,
     check_list_page,
     check_toggle_flow,
+)
+from checks_ssr import (  # noqa: E402
     check_unknown_id as check_ssr_unknown_id,
 )
-
-from app.main import create_app  # noqa: E402  (the example's installed package)
 
 CHECKS = [
     check_list_starts_empty,

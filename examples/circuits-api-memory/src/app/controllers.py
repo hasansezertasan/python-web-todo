@@ -92,9 +92,7 @@ class TodosController(Controller):
             return self._invalid_title()
         if done is not None:
             done = bool(done)
-        return self._json(
-            _to_dict(self._repo.update(parsed, title=title, done=done))
-        )
+        return self._json(_to_dict(self._repo.update(parsed, title=title, done=done)))
 
     def DELETE(self, todo_id: str | None = None, **kwargs: Any) -> str:
         parsed = self._todo_id(todo_id)

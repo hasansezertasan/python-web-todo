@@ -131,8 +131,12 @@ def check_example(example: str) -> int:
     cmd = ["uv", "run", "--project", f"examples/{example}", *spec["argv"]]
     print(f"== {example}: PORT={port} {' '.join(cmd)}")
     process = subprocess.Popen(
-        cmd, cwd=ROOT, env=env, stdin=subprocess.DEVNULL,
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        cmd,
+        cwd=ROOT,
+        env=env,
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
     )
     failures = 0
     try:
