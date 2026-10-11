@@ -1,0 +1,80 @@
+version = 1
+revision = 5
+requires-python = ">=3.10"
+
+[[package]]
+name = "baize"
+version = "0.23.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cb/32/4aa56759a5ab980551f89f077791d122670fe387c8480b701e7048e59521/baize-0.23.1.tar.gz", hash = "sha256:98346866e4420d21036b0435fae2be6fb01a0cf32b3c8a5398cdb545fea3e022", size = 60598, upload-time = "2025-08-10T10:28:13.253Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/64/e139a65a5c20f3dce4a98f122f5aaa3a767a0c0c51ecce792f4fb3925796/baize-0.23.1-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:4ae72a1c94bef336f1f7741ba24c5286673b92e522247b45de60f63fd1210a46", size = 324390, upload-time = "2025-08-10T10:28:26.519Z" },
+    { url = "https://files.pythonhosted.org/packages/10/b2/4c5fe4e45d5f2cc4fc009f72fbb9b7157f37421e739044670c7693f3b32c/baize-0.23.1-cp310-cp310-manylinux_2_39_x86_64.whl", hash = "sha256:a5d2b3466157cee65fe639b6f1cf0ca0719a3429d9535d6939c44afbfd687a67", size = 599398, upload-time = "2025-08-10T10:28:12.614Z" },
+    { url = "https://files.pythonhosted.org/packages/7a/15/f9ef2368f28f9f29f48bced9462eef7dd822d5881006dd6cc296b55f4a87/baize-0.23.1-cp310-cp310-win_amd64.whl", hash = "sha256:17b6df3e2d3ea1d2800b3e3fa1e5f88a115f9b2f1c4c6aacf07595f9af57f321", size = 266555, upload-time = "2025-08-10T10:28:48.379Z" },
+    { url = "https://files.pythonhosted.org/packages/64/2a/6d1e87609a152475e9da951a0aabcd91fcbbc723bcd1900083400a071a13/baize-0.23.1-cp311-cp311-macosx_15_0_arm64.whl", hash = "sha256:26dce1a6207b0ba9b0181ef86462263de2531fe4d4938bc214b82ea60fe918ce", size = 566188, upload-time = "2025-08-10T10:29:15.338Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/bb/316ec251cadf0312f9412697c207f05aaff696e7d0aaddc5912162b4dbe3/baize-0.23.1-cp311-cp311-manylinux_2_39_x86_64.whl", hash = "sha256:1774edf024371b6b329ccc8ef745a8c72b3b25b1e6613f2f54194cffe22b675c", size = 591046, upload-time = "2025-08-10T10:28:15.618Z" },
+    { url = "https://files.pythonhosted.org/packages/da/62/4f39948a3b51cc0baa694c207c8c62acc6b718b251d6717a6f5b7ce07ddd/baize-0.23.1-cp311-cp311-win_amd64.whl", hash = "sha256:f0ab063550ced9003c77a1019cf73e92984978cd47e3125d5aefb5bfb3b5dccf", size = 265939, upload-time = "2025-08-10T10:29:04.706Z" },
+    { url = "https://files.pythonhosted.org/packages/1f/db/ac983917edb926c2d4108e414f52ea869b0db9a3b561980a76334be87f3d/baize-0.23.1-cp312-cp312-macosx_15_0_arm64.whl", hash = "sha256:447e50f9f4e722536e0d9fb09dc50c9f9b6b2ef675cbf8d0883e71177770983e", size = 572594, upload-time = "2025-08-10T10:28:41.382Z" },
+    { url = "https://files.pythonhosted.org/packages/fb/c1/1a1785fcfad242117acb2cf1592dad3bac627820e734f6c62f2a29aef6ee/baize-0.23.1-cp312-cp312-manylinux_2_39_x86_64.whl", hash = "sha256:7ddab634331ebb6dba41526541ec2a727f5b31befea7e3344176ce639c7ca0bb", size = 607727, upload-time = "2025-08-10T10:28:11.497Z" },
+    { url = "https://files.pythonhosted.org/packages/fc/63/93f2c542280201c5d686792fa805767bfd8a9969138ce4a1e143659f7a66/baize-0.23.1-cp312-cp312-win_amd64.whl", hash = "sha256:19bd3f3209012e1e1154c71eed140dc5fb35aa579afda55d5cd10aecd0f51f15", size = 267525, upload-time = "2025-08-10T10:29:13.388Z" },
+    { url = "https://files.pythonhosted.org/packages/78/71/d5c33d11ce7ad1f65de63c82f1d35cd9b7997f2506390b2dbbfb74fff981/baize-0.23.1-cp313-cp313-macosx_15_0_arm64.whl", hash = "sha256:4047c4fa6b3092f985f4777d9da09e31ad576b98b177a88138ad539deaca4fbc", size = 571459, upload-time = "2025-08-10T10:28:51.753Z" },
+    { url = "https://files.pythonhosted.org/packages/10/dd/3b155eb2ace44347f51e9c34fe3bafb22cb85d35a7a27510e869bf7b4932/baize-0.23.1-cp313-cp313-manylinux_2_39_x86_64.whl", hash = "sha256:447769a49c38b23605a234bb99a12eddc096b77c1cb827727d265ac6b751b2e3", size = 604959, upload-time = "2025-08-10T10:28:14.231Z" },
+    { url = "https://files.pythonhosted.org/packages/22/1c/9bafa83f6c62eefe04ec94256520bf91b2a45104a4af8fb5e75232e313fb/baize-0.23.1-cp313-cp313-win_amd64.whl", hash = "sha256:4cc930282e6e432b0ac5a291c9374976c2d1f4248da51b14d0d4f7ba844a33a6", size = 267786, upload-time = "2025-08-10T10:29:02.592Z" },
+    { url = "https://files.pythonhosted.org/packages/70/ee/df058475964ce06bb7110669a8b9d3626b426049cedf701c47aab297bed7/baize-0.23.1-py3-none-any.whl", hash = "sha256:b68a6822899d78ecfd8a501e12bbe5eb2ead1aa32f1cf079ca3c0c928cbf87b9", size = 52386, upload-time = "2025-08-10T10:28:17.257Z" },
+]
+
+[[package]]
+name = "baize-api-memory"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "baize" },
+    { name = "uvicorn" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "baize", specifier = ">=0.23" },
+    { name = "uvicorn", specifier = ">=0.30" },
+]
+
+[[package]]
+name = "click"
+version = "8.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/0e/7fa0ef50764b67090eca4114772a2abf8b6148198475e54c660b97caeee6/click-8.5.0.tar.gz", hash = "sha256:ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34", size = 382235, upload-time = "2026-08-26T13:33:14.56Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/58/50/6c0d534c5f134586a8e1ba4e330569e32f057e33372ae556463212fb4cd3/click-8.5.0-py3-none-any.whl", hash = "sha256:255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360", size = 125251, upload-time = "2026-08-26T13:33:12.928Z" },
+]
+
+[[package]]
+name = "h11"
+version = "0.16.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963/h11-0.16.0.tar.gz", hash = "sha256:4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1", size = 101250, upload-time = "2025-04-24T03:35:25.427Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl", hash = "sha256:63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86", size = 37515, upload-time = "2025-04-24T03:35:24.344Z" },
+]
+
+[[package]]
+name = "typing-extensions"
+version = "4.16.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz", hash = "sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5", size = 113555, upload-time = "2026-07-02T08:40:05.92Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl", hash = "sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8", size = 45571, upload-time = "2026-07-02T08:40:04.659Z" },
+]
+
+[[package]]
+name = "uvicorn"
+version = "0.54.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "h11" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/da/34/30e9280707135d2cfc589dfff3cb796bd07a3aeb1a3e415ba09dd89d7bb4/uvicorn-0.54.0.tar.gz", hash = "sha256:a2e33cbfaa0306f8e6b0c13e0cb89d7d7a2da3e62b90c66e18c33d9807b28620", size = 112283, upload-time = "2026-09-25T06:52:37.601Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/38/0c/b54a4fdd7f90a3af8b02ebc9ce6712c2c208b7926a2f7bad95c33ebbe943/uvicorn-0.54.0-py3-none-any.whl", hash = "sha256:505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf", size = 87427, upload-time = "2026-09-25T06:52:35.829Z" },
+]

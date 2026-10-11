@@ -1,0 +1,20 @@
+[project]
+name = "django-ssr-memory-jinja"
+version = "0.1.0"
+description = "Todo server-rendered app with Django, Jinja2 templates, and in-memory storage"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "django>=5.0",
+    "jinja2>=3.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/config", "src/todos"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/todos/templates" = "todos/templates"

@@ -1,0 +1,18 @@
+[project]
+name = "fastapi-api-sqlite-sqlalchemy"
+version = "0.1.0"
+description = "Todo JSON API with FastAPI, SQLite storage via SQLAlchemy"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115",
+    "sqlalchemy>=2.0",
+    "uvicorn>=0.30",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/app"]

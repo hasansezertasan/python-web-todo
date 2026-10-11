@@ -1,0 +1,16 @@
+[project]
+name = "aiohttp-api-memory"
+version = "0.1.0"
+description = "Todo JSON API with aiohttp and in-memory storage"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.10",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/app"]

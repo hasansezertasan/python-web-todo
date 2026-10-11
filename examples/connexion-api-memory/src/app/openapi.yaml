@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+  title: Todo API (Connexion, in-memory)
+  version: 0.1.0
+paths:
+  /todos:
+    get:
+      operationId: app.handlers.list_todos
+      summary: List all todos
+      responses:
+        '200':
+          description: List of todos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+    post:
+      operationId: app.handlers.create_todo
+      summary: Create a todo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoCreate'
+      responses:
+        '201':
+          description: Created todo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '422':
+          description: Missing or empty title
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /todos/{todo_id}:
+    get:
+      operationId: app.handlers.get_todo
+      summary: Get one todo
+      parameters:
+        - $ref: '#/components/parameters/TodoId'
+      responses:
+        '200':
+          description: The todo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '404':
+          description: Unknown id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      operationId: app.handlers.update_todo
+      summary: Update title and/or done
+      parameters:
+        - $ref: '#/components/parameters/TodoId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoUpdate'
+      responses:
+        '200':
+          description: Updated todo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '404':
+          description: Unknown id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Empty title
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: app.handlers.delete_todo
+      summary: Delete a todo
+      parameters:
+        - $ref: '#/components/parameters/TodoId'
+      responses:
+        '204':
+          description: Deleted
+        '404':
+          description: Unknown id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  parameters:
+    TodoId:
+      name: todo_id
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Todo:
+      type: object
+      required: [id, title, done]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        done:
+          type: boolean
+    TodoCreate:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+          minLength: 1
+    TodoUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+        done:
+          type: boolean
+    Error:
+      type: object
+      required: [title, detail]
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
