@@ -53,10 +53,7 @@ def _invalid_title(response: Any) -> str:
 
 def _invalid_done(response: Any) -> str:
     return _json(
-        response,
-        {"error": "done must be a boolean"},
-        422,
-        "Unprocessable Entity",
+        response, {"error": "done must be a boolean"}, 422, "Unprocessable Entity"
     )
 
 

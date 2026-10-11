@@ -1,0 +1,129 @@
+name: Contract Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# Every example is exercised by exactly one runner:
+# - tests/django_check.py .... Django examples (one settings module per process)
+# - tests/venv_check.py ...... frameworks that cannot live in the shared root
+#                              venv; checks run inside the example's own venv
+# - tests/live_check.py ....... standalone servers with no usable in-process
+#                              test client; boots on an ephemeral PORT
+# The example sets are parsed out of those runners (single source of truth),
+# so adding an example to a runner automatically adds it to CI.
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      django: ${{ steps.find-examples.outputs.django }}
+      venv: ${{ steps.find-examples.outputs.venv }}
+      live: ${{ steps.find-examples.outputs.live }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: find-examples
+        run: |
+          django=$(python3 -c "
+          import ast, json
+          tree = ast.parse(open('tests/django_check.py').read())
+          lits = sorted({n.value for n in ast.walk(tree) if isinstance(n, ast.Constant) and isinstance(n.value, str) and n.value.startswith('django-')})
+          print(json.dumps(lits))
+          ")
+          venv=$(python3 -c "
+          import ast, json
+          tree = ast.parse(open('tests/_in_venv.py').read())
+          out = {}
+          for node in ast.walk(tree):
+              if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name) and node.targets[0].id in ('BUILDERS', 'ASYNC_EXAMPLES'):
+                  v = node.value
+                  if isinstance(v, ast.Dict):
+                      out[node.targets[0].id] = [k.value for k in v.keys]
+                  else:
+                      out[node.targets[0].id] = [e.value for e in v.elts]
+          print(json.dumps(sorted(set(out['BUILDERS']) | set(out['ASYNC_EXAMPLES']))))
+          ")
+          live=$(python3 -c "
+          import ast, json
+          tree = ast.parse(open('tests/live_check.py').read())
+          for node in ast.walk(tree):
+              if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name) and node.targets[0].id == 'LIVE':
+                  print(json.dumps(sorted(k.value for k in node.value.keys)))
+          ")
+          for name in django venv live; do
+            count=$(echo "${!name}" | python3 -c "import json, sys; print(len(json.load(sys.stdin)))")
+            echo "Found $count $name examples"
+            if [ "$count" -eq 0 ]; then
+              echo "::error::No $name examples found"
+              exit 1
+            fi
+          done
+          echo "django=$django" >> "$GITHUB_OUTPUT"
+          echo "venv=$venv" >> "$GITHUB_OUTPUT"
+          echo "live=$live" >> "$GITHUB_OUTPUT"
+
+  django:
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJson(needs.discover.outputs.django) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Check ${{ matrix.example }}
+        run: uv run python tests/django_check.py ${{ matrix.example }}
+
+  venv:
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJson(needs.discover.outputs.venv) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Check ${{ matrix.example }}
+        run: uv run python tests/venv_check.py ${{ matrix.example }}
+
+  live:
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        example: ${{ fromJson(needs.discover.outputs.live) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Check ${{ matrix.example }}
+        run: uv run python tests/live_check.py ${{ matrix.example }}

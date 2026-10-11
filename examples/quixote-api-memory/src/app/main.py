@@ -123,9 +123,7 @@ class TodosDirectory(Directory):
                     {"error": "title must be a non-empty string"}, status=422
                 )
             if done is not None and not isinstance(done, bool):
-                return _json_response(
-                    {"error": "done must be a boolean"}, status=422
-                )
+                return _json_response({"error": "done must be a boolean"}, status=422)
             try:
                 return _json_response(
                     _to_json(self._repo.update(todo_id, title=title, done=done))

@@ -40,9 +40,7 @@ def _invalid_title() -> Any:
 
 def _invalid_done() -> Any:
     return problem(
-        status=422,
-        title="Unprocessable Entity",
-        detail="Done must be a boolean.",
+        status=422, title="Unprocessable Entity", detail="Done must be a boolean."
     )
 
 
