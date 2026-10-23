@@ -3,7 +3,7 @@ name = "litestar-api-sqlite-advanced-alchemy"
 version = "0.1.0"
 description = "Todo JSON API with Litestar, SQLite and advanced-alchemy storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "litestar>=2.18",
     "advanced-alchemy>=1.11",

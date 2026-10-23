@@ -3,7 +3,7 @@ name = "sanic-api-memory"
 version = "0.1.0"
 description = "Todo JSON API with Sanic and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "sanic>=25.12",
     "sanic-testing>=24.6",

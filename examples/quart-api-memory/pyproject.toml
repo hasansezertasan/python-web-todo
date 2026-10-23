@@ -3,7 +3,7 @@ name = "quart-api-memory"
 version = "0.1.0"
 description = "Todo JSON API with Quart and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "quart>=0.20",
     "hypercorn>=0.17",

@@ -3,7 +3,7 @@ name = "django-ssr-memory-jinja"
 version = "0.1.0"
 description = "Todo server-rendered app with Django, Jinja2 templates, and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "django>=5.0",
     "jinja2>=3.1",

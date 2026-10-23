@@ -1,6 +1,6 @@
 version = 1
 revision = 5
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 [[package]]
 name = "falcon"
@@ -8,13 +8,6 @@ version = "4.4.0"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/a4/c7/a0584e932cdb42ab6e5dc3baab16352471dda1ba2215311c65d79ea3c0de/falcon-4.4.0.tar.gz", hash = "sha256:9f3ffbddc8baed4573295642eddb18a37eea37baba9f20c5be379c8b3d3d79e6", size = 699456, upload-time = "2026-09-30T18:20:25.783Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/84/1b/16dcb562398772d86d932df86ccf0912e0534af8054c8ffabd5ee85f8a9f/falcon-4.4.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:66a1a1adc3e109db8b3796b850e45be4140b1d548d64f55df4eaa4e0d8faf80a", size = 440934, upload-time = "2026-09-30T18:30:50.556Z" },
-    { url = "https://files.pythonhosted.org/packages/a3/fa/e79a19eebec90d1142efe5b633c4415aef7839fb6616c63ea5be5b44e9f8/falcon-4.4.0-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:da3c6a2a199c22439944dade75283075d05c0933555dea1917115e05bc6e9134", size = 899806, upload-time = "2026-09-30T18:30:52.161Z" },
-    { url = "https://files.pythonhosted.org/packages/03/c6/c44714ea73a78ccf922f49ee97212a2c844c598d3cbe1f695287ab51e70d/falcon-4.4.0-cp310-cp310-manylinux2014_s390x.manylinux_2_17_s390x.manylinux_2_28_s390x.whl", hash = "sha256:d19eda655279cb3cd578f21906daf0f035d8c4af58e6f9045924677a13a75855", size = 947443, upload-time = "2026-09-30T18:30:53.732Z" },
-    { url = "https://files.pythonhosted.org/packages/f0/c4/0ef124c8eab14b893cb34ce9fc9cb6dfc84ff1a00f48e48bbe3bf57cf187/falcon-4.4.0-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:efe2e91a16477cc6985de455a802ffa260dc378ec5a8df5ec6714ef0e977ee37", size = 902114, upload-time = "2026-09-30T18:30:55.307Z" },
-    { url = "https://files.pythonhosted.org/packages/df/8c/5c703275ef48d40ad42c56dbedce0ccfe3374b6c52ac0de50e5d138cf389/falcon-4.4.0-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:b65a6d001fdbd505d48638e0e6863ecebdb058ddab4d5495206f3485f06aaa45", size = 890776, upload-time = "2026-09-30T18:30:56.915Z" },
-    { url = "https://files.pythonhosted.org/packages/5b/fc/2cbf90baa3a64ed98f8dbf0ce9acf1daa627754fdf03029fdf2b6a9448cf/falcon-4.4.0-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:1c4ba4dda9f73cba359c455f60460d94790027fff8d1c1b61a71c2e6f4a3b642", size = 903633, upload-time = "2026-09-30T18:30:58.643Z" },
-    { url = "https://files.pythonhosted.org/packages/5f/37/5d43616e1b796775a54f7574a7a7fd021801c960fdb2a27620476be21c3d/falcon-4.4.0-cp310-cp310-win_amd64.whl", hash = "sha256:eca0396f386e20f73a4355439475e942fdfd90407750580bb1e4f03860b5ee15", size = 427650, upload-time = "2026-09-30T18:31:00.466Z" },
     { url = "https://files.pythonhosted.org/packages/54/83/9bfc4991501d263429338098b02c087ba02830e92501ccbe2a0f7254cfef/falcon-4.4.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:0947e3e3c3f0e9c53578c0235529f162312817c840fcf7ef5e876cde57a5ff79", size = 439215, upload-time = "2026-09-30T18:31:02.1Z" },
     { url = "https://files.pythonhosted.org/packages/51/43/3abb25b87c04d93f0acdc051803cb3460c9f99a0f7d611600d2e082c5ef8/falcon-4.4.0-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:2c514ceb6e38327b630fa4c2f3b666a304a515f214b4a6877a369a7b57a97c93", size = 927406, upload-time = "2026-09-30T18:31:03.704Z" },
     { url = "https://files.pythonhosted.org/packages/65/20/0ab0b696814c9f02e2c1fba45140a7eceab79e0373e73f55baab76ed966c/falcon-4.4.0-cp311-cp311-manylinux2014_s390x.manylinux_2_17_s390x.manylinux_2_28_s390x.whl", hash = "sha256:c25aae7190f4a382d0ae96dfc7952f8cd76401585eb54eb7a6c78ff9ff9b453e", size = 972201, upload-time = "2026-09-30T18:31:05.173Z" },

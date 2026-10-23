@@ -3,7 +3,7 @@ name = "klein-api-memory"
 version = "0.1.0"
 description = "Todo JSON API with Klein (Twisted micro-framework) and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "klein>=24.8",
 ]

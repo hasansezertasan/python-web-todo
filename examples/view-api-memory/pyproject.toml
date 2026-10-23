@@ -3,7 +3,7 @@ name = "view-api-memory"
 version = "0.1.0"
 description = "Todo JSON API with view.py and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "view-py @ git+https://github.com/ZeroIntensity/view.py",
     "uvicorn>=0.30",
