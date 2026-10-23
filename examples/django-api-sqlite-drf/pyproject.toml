@@ -3,7 +3,7 @@ name = "django-api-sqlite-drf"
 version = "0.1.0"
 description = "Todo JSON API with Django, Django REST framework and SQLite storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "django>=5.0",
     "djangorestframework>=3.15",

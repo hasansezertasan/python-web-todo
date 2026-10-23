@@ -3,7 +3,7 @@ name = "litestar-ssr-memory"
 version = "0.1.0"
 description = "Todo server-rendered app with Litestar, Jinja templates, and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "jinja2>=3.1",
     "litestar>=2.24",

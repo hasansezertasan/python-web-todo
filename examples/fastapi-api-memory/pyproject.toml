@@ -3,7 +3,7 @@ name = "fastapi-api-memory"
 version = "0.1.0"
 description = "Todo JSON API with FastAPI and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115",
     "uvicorn>=0.30",

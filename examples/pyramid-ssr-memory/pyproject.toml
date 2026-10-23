@@ -3,7 +3,7 @@ name = "pyramid-ssr-memory"
 version = "0.1.0"
 description = "Server-rendered todo app with Pyramid, Chameleon, and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "chameleon>=3.9",
     "pyramid>=2.0",

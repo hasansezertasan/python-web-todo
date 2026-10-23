@@ -3,7 +3,7 @@ name = "flask-ssr-memory-jinja"
 version = "0.1.0"
 description = "Server-rendered todo app with Flask, Jinja, and in-memory storage"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "flask>=3.1",
 ]
